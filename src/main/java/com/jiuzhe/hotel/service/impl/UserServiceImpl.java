@@ -12,7 +12,6 @@ import com.jiuzhe.hotel.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +28,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     @Resource
     UserDao userDao;
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
