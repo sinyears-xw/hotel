@@ -63,7 +63,7 @@ public class LoginController {
             responseBase.setStatus(status);
             responseBase.setData(map);
         } catch (Exception e) {
-            logger.error("logion phone failed", e);
+            logger.error("login phone failed", e);
             responseBase.setStatus(SendMessageEnum.FAILED.getIndex());
             responseBase.setMessage("异常");
         }
