@@ -6,8 +6,8 @@ server:
 
 aliyun:
   asc:
-    access-key-id: LTAIhT8Jg7FlECCS
-    access-key-secret: WW7AHU6cmMMaqbkjxVZk4Bvs72MetE
+    access-key-id: LTAIYgPogSphWPcI
+    access-key-secret: HYRp7mjp7uXpKlfrrwvUhHOLfQaB1X
   oss:
     access-key-id: LTAIb0dQFOQqsXtu
     access-key-secret: 25x1wuUQ0Hl5raJ7v9Dps4WBuuFPyt
