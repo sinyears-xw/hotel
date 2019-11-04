@@ -3,3 +3,8 @@ spring:
     active: dev
 server:
   port: 8080
+
+aliyun:
+  asc:
+    access-key-id: LTAIhT8Jg7FlECCS
+    access-key-secret: WW7AHU6cmMMaqbkjxVZk4Bvs72MetE

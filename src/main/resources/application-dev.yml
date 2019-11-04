@@ -15,7 +15,3 @@ spring:
     port: 6379
     # Redis服务器连接密码（默认为空）
     password:
-aliyun:
-  asc:
-    access-key-id: LTAIhT8Jg7FlECCS
-    access-key-secret: WW7AHU6cmMMaqbkjxVZk4Bvs72MetE
