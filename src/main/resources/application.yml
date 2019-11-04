@@ -8,3 +8,17 @@ aliyun:
   asc:
     access-key-id: LTAIhT8Jg7FlECCS
     access-key-secret: WW7AHU6cmMMaqbkjxVZk4Bvs72MetE
+  oss:
+    access-key-id: LTAIb0dQFOQqsXtu
+    access-key-secret: 25x1wuUQ0Hl5raJ7v9Dps4WBuuFPyt
+    end-point: sts.cn-hangzhou.aliyuncs.com
+    role-arn: acs:ram::1318720335258170:role/aliyunosstokengeneratorrole
+    role-session-name: external-username
+mybatis:
+  type-aliases-package: com.jiuzhe.hotel.entity
+
+user:
+  token:
+    time-day: 7
+  msgcode:
+    time-sec: 60
