@@ -25,6 +25,7 @@ aliyun:
     end-point: sts.cn-hangzhou.aliyuncs.com
     role-arn: acs:ram::1318720335258170:role/aliyunosstokengeneratorrole
     role-session-name: external-username
+    bucketName:
 mybatis:
   type-aliases-package: com.jiuzhe.hotel.entity
 
@@ -33,6 +34,17 @@ user:
     time-day: 7
   msgcode:
     time-sec: 60
+pagehelper:
+  auto-dialect: true
+  close-conn: true
+maxreservationday: 38
+hotel:
+  order:
+    paied:
+      expired-time: 15
+      cancel-time : 120
+    user:
+      max-num: 2
 
 uid:
   workerId: 0
