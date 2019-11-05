@@ -1,6 +1,6 @@
 package com.jiuzhe.hotel.service.impl;
 
-import com.jiuzhe.hotel.constants.rtCodeConstant;
+import com.jiuzhe.hotel.constants.RtCodeConstant;
 import com.jiuzhe.hotel.module.CleanQuery;
 import com.jiuzhe.hotel.service.CleanService;
 import com.jiuzhe.hotel.utils.StringUtil;
@@ -32,7 +32,7 @@ public class CleanServiceImpl implements CleanService {
                 "LEFT JOIN hotel_sku_layout c on a.layout_id = c.id\n" +
                 "LEFT JOIN store b ON a.store_id = b.id\n" +
                 "WHERE b.id in %s  and a.room_status = 3", ids));
-        return rtCodeConstant.getResult("0", crr);
+        return RtCodeConstant.getResult("0", crr);
     }
 
     @Transactional
@@ -43,12 +43,12 @@ public class CleanServiceImpl implements CleanService {
         String hrId = query.getHrId();
         String cleannerName = query.getCleannerName();
         //清洁完了改状态
-        int a = jdbcTemplate.update(String.format("UPDATE hotel_sku SET room_status = 1 where id = '%s' AND room_status = 3 ",skuId));
+        int a = jdbcTemplate.update(String.format("UPDATE hotel_sku SET room_status = 1 where id = '%s' AND room_status = 3 ", skuId));
         if (0 == a) {
-            return rtCodeConstant.getResult("2");
+            return RtCodeConstant.getResult("2");
         }
         //写入清洁日志
 //        jdbcTemplate.update(String.format("INSERT INTO clean_record(id,merchant_id,hr_id,sku_id,cleaner_name)VALUES('%s','%s','%s','%s','%s')", id, merchantId, hrId, skuId, cleannerName));
-        return rtCodeConstant.getResult("0");
+        return RtCodeConstant.getResult("0");
     }
 }

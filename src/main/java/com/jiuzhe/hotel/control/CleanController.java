@@ -1,6 +1,6 @@
 package com.jiuzhe.hotel.control;
 
-import com.jiuzhe.hotel.constants.rtCodeConstant;
+import com.jiuzhe.hotel.constants.RtCodeConstant;
 import com.jiuzhe.hotel.module.CleanQuery;
 import com.jiuzhe.hotel.service.CleanService;
 import org.slf4j.Logger;
@@ -32,10 +32,10 @@ public class CleanController {
             List<String> storeIds = storeIdsMap.get("storeIds");
             return service.getCleanInfo(storeIds);
         } catch (DuplicateKeyException e) {
-            return rtCodeConstant.getResult("2");
+            return RtCodeConstant.getResult("2");
         } catch (Exception e) {
             logger.error(e.toString());
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 
@@ -45,10 +45,10 @@ public class CleanController {
         try {
             return service.changRoomStaus(query);
         } catch (DuplicateKeyException e) {
-            return rtCodeConstant.getResult("2");
+            return RtCodeConstant.getResult("2");
         } catch (Exception e) {
             logger.error(e.toString());
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 }

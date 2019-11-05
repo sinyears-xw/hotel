@@ -1,6 +1,6 @@
 package com.jiuzhe.hotel.control;
 
-import com.jiuzhe.hotel.constants.rtCodeConstant;
+import com.jiuzhe.hotel.constants.RtCodeConstant;
 import com.jiuzhe.hotel.dao.SkuLayoutDao;
 import com.jiuzhe.hotel.service.RoomReservationService;
 import com.jiuzhe.hotel.service.SkuLayoutService;
@@ -83,7 +83,7 @@ public class SkuLayoutController {
             return roomReservationService.getReservation(skuid, dt1, dt2);
         } catch (Exception e) {
             logger.error(e);
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 
@@ -94,7 +94,7 @@ public class SkuLayoutController {
             return roomReservationService.getReservation(skuid, dt1);
         } catch (Exception e) {
             logger.error(e);
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 
@@ -105,7 +105,7 @@ public class SkuLayoutController {
             return roomReservationService.setReservation(skuid, dt1);
         } catch (Exception e) {
             logger.error(e);
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 
@@ -116,7 +116,7 @@ public class SkuLayoutController {
             return roomReservationService.setReservation(skuid, dt1, dt2);
         } catch (Exception e) {
             logger.error(e);
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 
@@ -126,10 +126,10 @@ public class SkuLayoutController {
         try {
             return service.createSkuLayout(layout);
         } catch (DuplicateKeyException e) {
-            return rtCodeConstant.getResult("2");
+            return RtCodeConstant.getResult("2");
         } catch (Exception e) {
             logger.error(e);
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 
@@ -140,7 +140,7 @@ public class SkuLayoutController {
             return service.queryAllSkuLayout(id);
         } catch (Exception e) {
             logger.error(e);
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 
@@ -151,7 +151,7 @@ public class SkuLayoutController {
             return service.querySingleSkuLayout(id);
         } catch (Exception e) {
             logger.error(e);
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 
@@ -162,7 +162,7 @@ public class SkuLayoutController {
             return service.updateSingleSkuLayout(id, layout);
         } catch (Exception e) {
             logger.error(e);
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 
@@ -173,7 +173,7 @@ public class SkuLayoutController {
             return service.removeSkuLayout(id);
         } catch (Exception e) {
             logger.error(e);
-            return rtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("-1");
         }
     }
 }
