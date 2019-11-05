@@ -5,13 +5,4 @@ spring:
     url: jdbc:mysql://localhost:3306/jiuzhe?&useUnicode=true&characterEncoding=utf-8&useSSL=false&&serverTimezone=UTC
     username: root
     password: 123456
-# REDIS (RedisProperties)
-  redis:
-    # Redis数据库索引（默认为0）
-    database: 0
-    # Redis服务器地址
-    host: localhost
-    # Redis服务器连接端口
-    port: 6379
-    # Redis服务器连接密码（默认为空）
-    password:
+

@@ -1,6 +1,17 @@
 spring:
   profiles:
     active: dev
+
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    # Redis服务器地址
+    host: localhost
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password:
+
 server:
   port: 8080
 
