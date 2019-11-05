@@ -10,19 +10,37 @@ public class StringUtil {
     /**
      * 获取去掉横线的长度为32的UUID串.
      *
-     * @author WuShuicheng.
      * @return uuid.
+     * @author WuShuicheng.
      */
     public static String get32UUID() {
         return UUID.randomUUID().toString().replace("-", "");
     }
+
     /**
-    	 * @Description:判定String是否是null或者""
-    	 * @author:郑鹏宇
-    	 * @date:2018/3/30
-    	 */
+     * @Description:判定String是否是null或者""
+     * @author:郑鹏宇
+     * @date:2018/3/30
+     */
     public static boolean isEmptyOrNull(String str) {
         return null == str || str.isEmpty();
+    }
+
+
+    public static String strArray2str(String[] strarray) {
+        if (null == strarray) {
+            return null;
+        }
+        String rs = "";
+        for (int i = 0; i < strarray.length; i++) {
+            if (i == strarray.length - 1) {
+                rs += strarray[i];
+                break;
+            }
+            rs += strarray[i] + ",";
+        }
+
+        return rs;
     }
 
     /**
@@ -52,9 +70,9 @@ public class StringUtil {
     public static String ListToSqlStr(List<String> list) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
-            sb.append("'"+list.get(i)+"'").append(",");
+            sb.append("'" + list.get(i) + "'").append(",");
         }
-        String a = list.isEmpty()?"":sb.toString().substring(0, sb.toString().length() - 1);
-        return "("+a+")";
+        String a = list.isEmpty() ? "" : sb.toString().substring(0, sb.toString().length() - 1);
+        return "(" + a + ")";
     }
 }
