@@ -22,3 +22,7 @@ user:
     time-day: 7
   msgcode:
     time-sec: 60
+
+uid:
+  workerId: 0
+  datacenterId: 0
