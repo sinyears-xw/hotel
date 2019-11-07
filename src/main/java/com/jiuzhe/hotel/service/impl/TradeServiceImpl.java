@@ -104,69 +104,76 @@ public class TradeServiceImpl implements TradeService {
     }
 
     //提现
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public Map withdraw(Map param) {
-        String userId = param.get("userId").toString();
-        String withdrawId = param.get("id").toString();
-        String channel = param.get("channel").toString();
-        String description = param.get("description").toString();
-        long withdrewAmount = Long.parseLong(param.get("withdrewAmount").toString());
+    public Map withdraw(String userId, String withdrawAmount, String payPassword, String channel, String description) {
+        long withdrewAmount = Long.parseLong(withdrawAmount);
         //校验用户信息
         Map userMap = getUserByUserId(userId, "withdraw");
         if (null == userMap) {
-            upWithdrawStatus(withdrawId, "2", "0");
-            return RtCodeConstant.getResult("20006");
+            return RtCodeConstant.getResult("20007");
         }
+
+        String storedPasswd = userMap.get("passwd").toString();
+        if (null == storedPasswd || "".equals(storedPasswd))
+            return RtCodeConstant.getResult("20008");
+
+        if (!payPassword.equals(storedPasswd))
+            return RtCodeConstant.getResult("20009");
+
         //校验提现金额
-        if (withdrewAmount < 0 || withdrewAmount > Long.parseLong(userMap.get("amount").toString())) {
-            upWithdrawStatus(withdrawId, "2", "0");
+        if (withdrewAmount < 0 || withdrewAmount > Long.parseLong(userMap.get("available_balance").toString())) {
             return RtCodeConstant.getResult("20005");
         }
-        String aliparamString = "";
 
         int withdrew = 0;
-        switch (channel) {
-            case "alipay":
-                //获取阿里云的账号和名称
-                String aliAccount = userMap.get("aliAccount").toString();
-                Map aliAccountMap = JsonUtil.str2Bean(aliAccount, Map.class);
-                String payeeName = aliAccountMap.get("name").toString();
-                String payeeAccount = aliAccountMap.get("account").toString();
-                Map aliparam = new HashMap<String, String>();
-                aliparam.put("out_biz_no", withdrawId);
-                aliparam.put("payee_type", AlipayConfig.payee_type);
-                aliparam.put("payer_show_name", AlipayConfig.payer_show_name);
-                aliparam.put("payee_account", payeeAccount);
-                aliparam.put("payee_real_name", payeeName);
-                aliparam.put("amount", String.valueOf(((double) withdrewAmount / 100)));
-                aliparam.put("remark", description);
-                try {
-                    ObjectMapper mapper = new ObjectMapper();
-                    aliparamString = mapper.writeValueAsString(aliparam);
-                } catch (Exception e) {
-                    return RtCodeConstant.getResult("-1");
-                }
-                //进入提现，需要锁住提现状态，一次只能进行一次提现
-                upUserWithdraw(userId, "0");
-                Map rs = alipayService.doTrans(aliparamString);
-                if (rs.get("status").equals("30003"))
-                    withdrew = 1;
+        String aliparamString;
+        String withdrawId = idService.uid();
+        upUserWithdraw(userId, "0");
 
-                break;
+        try {
+            switch (channel) {
+                case "alipay":
+                    //获取阿里云的账号和名称
+                    String payeeName = userMap.get("aliName").toString();
+                    String payeeAccount = userMap.get("aliAccount").toString();
+                    Map aliparam = new HashMap<String, String>();
+                    aliparam.put("out_biz_no", withdrawId);
+                    aliparam.put("payee_type", AlipayConfig.payee_type);
+                    aliparam.put("payer_show_name", AlipayConfig.payer_show_name);
+                    aliparam.put("payee_account", payeeAccount);
+                    aliparam.put("payee_real_name", payeeName);
+                    aliparam.put("amount", String.valueOf(((double) withdrewAmount / 100)));
+                    aliparam.put("remark", description);
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        aliparamString = mapper.writeValueAsString(aliparam);
+                    } catch (Exception e) {
+                        return RtCodeConstant.getResult("-1");
+                    }
+                    Map rs = alipayService.doTrans(aliparamString);
+                    if (rs.get("status").equals("30003"))
+                        withdrew = 1;
+
+                    break;
+
+                default:
+                    return RtCodeConstant.getResult("20010");
+            }
+
+            return withdrawTrans(withdrew, withdrawId, userId, withdrawAmount);
+        } finally {
+            upUserWithdraw(userId, "1");
         }
+    }
 
+
+    @Transactional
+    public Map withdrawTrans(int withdrew, String withdrawId, String userId, String withdrewAmount) {
         if (withdrew != 1) {
-            //提现失败，提现金额为0
-            upWithdrawStatus(withdrawId, "2", "0");
+            insertWithdraw(withdrawId, userId, withdrewAmount, "4");
             return RtCodeConstant.getResult("-1");
         }
-        //提现成功，返回给支付宝的实际金额
-        upWithdrawStatus(withdrawId, "0", String.valueOf(withdrewAmount));
-        //修改用户金额
+        insertWithdraw(withdrawId, userId, withdrewAmount, "3");
         upUserAmount(userId, "-" + withdrewAmount);
-        //释放提现权限
-        upUserWithdraw(userId, "1");
         return RtCodeConstant.getResult("0");
     }
 
@@ -203,9 +210,9 @@ public class TradeServiceImpl implements TradeService {
     private Map getUserByUserId(String userId, String depositOrWithdraw) {
         try {
             Map query = sqlService.init().select()
-                    .table("user")
+                    .table("account")
                     .column("*")
-                    .condition("userId = ", userId)
+                    .condition("user_id ", userId)
                     .end(" for update ")
                     .queryMap();
             if (null != query && "1".equals(query.get(depositOrWithdraw).toString())) {
@@ -221,9 +228,11 @@ public class TradeServiceImpl implements TradeService {
     //修改用户金额（提现为负，充值为正）
     private void upUserAmount(String userId, String amount) {
         sqlService.init().update()
-                .table("user")
-                .column("amount")
-                .valueI("amount" + amount)
+                .table("account")
+                .column("total_balance")
+                .valueI("total_balance" + amount)
+                .column("available_balance")
+                .valueI("available_balance" + amount)
                 .condition("userId = ", userId)
                 .modify();
     }
@@ -231,10 +240,18 @@ public class TradeServiceImpl implements TradeService {
     //修改用户表中提现权限
     private void upUserWithdraw(String userId, String withdraw) {
         sqlService.init().update()
-                .table("user")
-                .column("withdraw")
+                .table("account")
+                .column("canWithdraw")
                 .value(withdraw)
                 .condition("userId = ", userId)
+                .modify();
+    }
+
+    private void insertWithdraw(String withdrawId, String userId, String withdrewAmount, String status) {
+        sqlService.init().insert()
+                .table("withdraw")
+                .column("id", "user_id", "amount", "status")
+                .value(withdrawId, userId, withdrewAmount, status)
                 .modify();
     }
 

@@ -17,9 +17,9 @@ public class AlipayConfig {
 	// 支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm 对应APPID下的支付宝公钥。
     public static String alipay_public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoGseQxjYp0sNeb2tVPmoMWKdU/rGMFXgL9rVL6RRvgs6AizHNyiRF1hFGY0utEE7zTv9VjXH3ReYiPC4LwyRFKYaRi6c1QXGB7zcIOak3+N8iUNI5HRHlBTy3kiIZM5ciW7oaMFep+BVecjV7TYrcftQGyNfQCiGn3f4Cfg+Dt8RTK4acV5YeyeYiIWuzyR0s667SxOAP/zN98MRsfRwkRJ3j29Hg9LXTlNXDMCubxt4u5YVmg88qAoSyEwBpAokvOyFbCgJy6sUhY1lp4fnKPtXdr+gyOBX3rIV5VhNmA/uxvVjTF0yDfc9WuWw+EJJ7OdgJ5/OW/sMrjnnYv9oqwIDAQAB";
 
-	public static String notify_url_deposit = "http://118.31.0.68:7171/api/webhook/alipay/deposit";
+	public static String notify_url_deposit = "http://39.99.40.118/api/webhook/alipay/deposit";
 
-	public static String notify_url_charge = "http://118.31.0.68:7171/api/webhook/alipay/charge";
+	public static String notify_url_charge = "http://39.99.40.118/api/webhook/alipay/charge";
 
 	// 签名方式
 	public static String sign_type = "RSA2";
