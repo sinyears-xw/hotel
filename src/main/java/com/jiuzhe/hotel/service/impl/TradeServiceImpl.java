@@ -147,17 +147,6 @@ public class TradeServiceImpl implements TradeService {
     }
 
 
-    //根据id，修改提现订单状态和具体提现金额
-    public void upWithdrawStatus(String withdrawId, String status, String withdrewAmount) {
-        sqlService.init().update()
-                .table("withdraw")
-                .column("status", "updt", "withdrewAmount")
-                .value(status, LocalDateTime.now().toString(), withdrewAmount)
-                .condition("id = ", withdrawId)
-                .modify();
-    }
-
-
     //根据id，修改充值订单状态和具体提现金额,同时需要将用户金额加上充值金额
     @Transactional(rollbackFor = Exception.class)
     @Override

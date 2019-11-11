@@ -34,14 +34,6 @@ public class AccountServiceImpl implements AccountService {
 			return false;
 	}
 
-	private boolean checkSettleAccount(String id, String channel) {
-		Map num = jdbcTemplate.queryForMap(String.format("select count(1) num from settle_account where user_id = '%s' and channel = '%s'",id, channel));
-		if (Integer.parseInt(num.get("num").toString()) > 0)
-			return true;
-		else
-			return false;
-	}
-
 	private boolean checkChannel(String c) {
 		String[] channels = new String[]{"alipay","wx","wx_pub","wx_lite","bank_account"};
 		for (int i = 0; i < channels.length; i++) {
@@ -82,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
 		if (StringUtil.isEmpty(userId))
 			return RtCodeConstant.getResult("40001");
 
-		jdbcTemplate.update(String.format("delete from settle_account  where user_id='%s' and channel='alipay'",userId));
+		jdbcTemplate.update(String.format("UPDATE account SET aliAccount = '' and aliName = ''  where user_id='%s' and channel='alipay'",userId));
 
 		return RtCodeConstant.getResult("0");
 	}		
@@ -107,17 +99,11 @@ public class AccountServiceImpl implements AccountService {
 		if (StringUtil.isEmpty(recipient_name))
 			return RtCodeConstant.getResult("40001");
 
-		String recipient_type = param.get("recipient_type").toString();
-		if (StringUtil.isEmpty(recipient_type) || !(recipient_type.equals("b2c") || recipient_type.equals("b2b")))
-			return RtCodeConstant.getResult("40001");
-
-		String openBankCode = "";
-	
-		if (checkSettleAccount(userId, channel))
-			jdbcTemplate.update(String.format("update settle_account set recipient_account='%s',recipient_name='%s',recipient_type='%s',recipient_open_bank_code='%s' where user_id='%s' and channel='%s'", recipient_account,recipient_name,recipient_type,openBankCode,userId,channel));
-		else
-			jdbcTemplate.update(String.format("insert into settle_account(recipient_account,recipient_name,recipient_type,user_id,channel,recipient_open_bank_code) values('%s','%s','%s','%s','%s','%s')", recipient_account,recipient_name,recipient_type,userId,channel,openBankCode));
-		
+		switch (channel) {
+			case "alipay":
+				jdbcTemplate.update(String.format("update account set aliAccount='%s',aliName='%s' where user_id='%s' and channel='%s'", recipient_account, recipient_name, userId, channel));
+				break;
+		}
 		return RtCodeConstant.getResult("0");
 	}		
 
@@ -164,7 +150,7 @@ public class AccountServiceImpl implements AccountService {
 
 
 	public Map getSettleAccount(String id) {
-		String sql = String.format("select * from settle_account where user_id = '%s' ",id);
+		String sql = String.format("select aliAccount, aliName from settle_account where user_id = '%s' ",id);
 		List<Map<String, Object>> products = jdbcTemplate.queryForList(sql);
 		return RtCodeConstant.getResult("0", products);
 	}

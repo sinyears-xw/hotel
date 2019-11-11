@@ -59,7 +59,7 @@ public class TradeController {
             String channel = param.get("channel").toString();
             String depositAmount = param.get("depositAmount").toString();
 
-            return tradeService.deposit(param);
+            return tradeService.deposit(userId, body, subject, channel, depositAmount);
         } catch (Exception e) {
             return RtCodeConstant.getResult("-1");
         }
