@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiuzhe.hotel.config.AlipayConfig;
 import com.jiuzhe.hotel.constants.RtCodeConstant;
 import com.jiuzhe.hotel.service.*;
-import com.jiuzhe.hotel.utils.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,52 +28,24 @@ public class TradeServiceImpl implements TradeService {
     @Autowired
     AlipayService alipayService;
 
-    private boolean checkId(String id, int type) {
-        Map num = null;
-        switch (type) {
-            case 1:
-                num = sqlService.init().select().table("deposit")
-                        .column("count(1) num ")
-                        .condition("id = ", id)
-                        .queryMap();
-                break;
-            case 2:
-                num = sqlService.init().select().table("")
-                        .column("count(1) num ")
-                        .condition("id = ", id)
-                        .queryMap();
-                break;
-        }
-
-        if (Integer.parseInt(num.get("num").toString()) <= 0)
-            return true;
-
-        return false;
-    }
-
 
     //充值
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Map deposit(Map param) {
-        //获取用户信息
-        String userId = param.get("userId").toString();
-        String depositId = idService.uid();
-        String body = param.get("body").toString();
-        String subject = param.get("subject").toString();
-        String channel = param.get("channel").toString();
-        Double amount = Double.parseDouble(param.get("depositAmount").toString());
+    public Map deposit(String userId, String body, String subject, String channel, String depositAmount) {
+        Double amount = Double.parseDouble(depositAmount);
         Map userMap = getUserByUserId(userId, "deposit");
         Map order = null;
+
         if (null == userMap) {
             return RtCodeConstant.getResult("20006");
         }
-        if (!checkId(depositId, 1))
-            return RtCodeConstant.getResult("20002");
 
         if (amount <= 0) {
             return RtCodeConstant.getResult("20003", String.valueOf(amount));
         }
+
+        String depositId = idService.uid();
         sqlService.init().insert().table("deposit")
                 .column("id").value(depositId)
                 .column("userId").value(userId)
@@ -87,15 +58,13 @@ public class TradeServiceImpl implements TradeService {
             case "alipay":
                 //使用阿里支付
                 order = alipayService.getOrder(depositId + "_" + userId, amount / 100, body, subject, AlipayConfig.notify_url_deposit, false);
-                System.out.println(order);
+                logger.info(order.toString());
                 if (!order.get("status").equals("0")) {
                     throw new RuntimeException();
                 }
                 break;
 
         }
-
-//        return order;
 
         Map rs = new HashMap();
         rs.put("depositId", depositId + "_" + userId);

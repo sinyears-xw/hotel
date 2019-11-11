@@ -53,6 +53,12 @@ public class TradeController {
     @PostMapping("/deposit")
     public Map deposit(@RequestBody Map param) {
         try {
+            String userId = param.get("userId").toString();
+            String body = param.get("body").toString();
+            String subject = param.get("subject").toString();
+            String channel = param.get("channel").toString();
+            String depositAmount = param.get("depositAmount").toString();
+
             return tradeService.deposit(param);
         } catch (Exception e) {
             return RtCodeConstant.getResult("-1");
