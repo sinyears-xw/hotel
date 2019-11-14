@@ -17,12 +17,12 @@ public class UserProvider {
      */
     public String getUserById(String id) {
         return new SQL() {{
-            SELECT("id,user_name userName," +
+            SELECT("user_id id,user_name userName," +
                     "phone,email,real_name realName,id_card idCard," +
                     "remark,img_url imgUrl,sex,birthday");
-            FROM("jzt_user");
+            FROM("account");
             if (!StringUtil.isEmptyOrNull(id)) {
-                WHERE("id=#{id}");
+                WHERE("user_id=#{id}");
             }
         }}.toString();
     }
@@ -34,10 +34,10 @@ public class UserProvider {
      */
     public String getUserByPhone(String phone) {
         return new SQL() {{
-            SELECT("id,user_name userName," +
+            SELECT("user_id id,user_name userName," +
                     "phone,email,real_name realName,id_card idCard," +
                     "remark,img_url imgUrl,sex,birthday");
-            FROM("jzt_user");
+            FROM("account");
             if (!StringUtil.isEmptyOrNull(phone)) {
                 WHERE("phone=#{phone}");
             }
@@ -66,7 +66,7 @@ public class UserProvider {
      */
     public String updateUser(User user) {
         return new SQL() {{
-            UPDATE("jzt_user");
+            UPDATE("account");
             if (!StringUtil.isEmptyOrNull(user.getUserName())) {
                 SET("user_name=#{userName}");
             }
@@ -94,7 +94,7 @@ public class UserProvider {
             if (!StringUtil.isEmptyOrNull(user.getBirthday())) {
                 SET("birthday=#{birthday}");
             }
-            WHERE("id=#{id}");
+            WHERE("user_id=#{id}");
         }}.toString();
     }
 
@@ -106,9 +106,9 @@ public class UserProvider {
     public String checkPhone(User user) {
         return new SQL() {{
             SELECT("count(1)");
-            FROM("jzt_user");
+            FROM("account");
             if (!StringUtil.isEmptyOrNull(user.getId())) {
-                WHERE("id=#{id}");
+                WHERE("user_id=#{id}");
             }
             if (!StringUtil.isEmptyOrNull(user.getPhone())) {
                 WHERE("phone=#{phone}");

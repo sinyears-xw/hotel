@@ -18,7 +18,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.jiuzhe.app.platform.control"))
+                .apis(RequestHandlerSelectors.basePackage("com.jiuzhe.hotel.control"))
                 .paths(PathSelectors.any())
                 .build();
     }

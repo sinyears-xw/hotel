@@ -68,7 +68,6 @@ public class UserServiceImpl implements UserService {
         }
         ValueOperations<String, String> operations = redisTemplate.opsForValue();
         operations.set("plantform:user:change:new-phone:" + query.getId(), query.getPhone(), 180, TimeUnit.SECONDS);
-        //todo 发送验证码
         Integer rst = service.sendValidateCode(query.getPhone(), query.getMessageCode(), query.getId());
         return rst;
     }

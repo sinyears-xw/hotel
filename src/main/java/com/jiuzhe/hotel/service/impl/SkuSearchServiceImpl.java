@@ -60,13 +60,11 @@ public class SkuSearchServiceImpl implements SkuSearchService {
     @Override
     public List<Search> getHotelItems(SearchQuery searchQuery) {
         List<Search> hotelItems = skuSearchQueryDao.getHotels(searchQuery);
-        System.out.println(hotelItems + "++++++++++++++++++++====");
         List<Search> forDelete = new ArrayList<>();
         for (Search dto : hotelItems) {
             //判定房间状态
             dto.setStatus(dto.getDefStatus());
             Map map = hotelorderService.getReservation(dto.getId(), searchQuery.getStartDate(), searchQuery.getEndDate());
-            //TODO 过滤掉已经被订的
             if ("0".equals(map.get("status"))) {
                 if (!"1".equals(map.get("canBeReserved"))) {
                     dto.setStatus(RoomStatusEnum.SALED.getIndex());

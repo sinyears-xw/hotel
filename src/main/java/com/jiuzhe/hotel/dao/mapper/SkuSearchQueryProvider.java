@@ -13,7 +13,7 @@ import org.apache.ibatis.jdbc.SQL;
 public class SkuSearchQueryProvider {
     public String getHotels(SearchQuery searchQueryEntity) {
         return new SQL(){{
-            SELECT("a.id ,d.lng,d.lat,a.room_status defStatus, d.storePic storePic, d.ReceptionPic receptionPic, a.room_price defPrice ,c.listing_price price,a.score," +
+            SELECT("a.id,d.lng,d.lat,a.room_status defStatus, d.storePic storePic, d.ReceptionPic receptionPic, a.room_price defPrice ,c.listing_price price,a.score," +
                     "a.address,b.name roomType,d.name skuName,a.room_no roomNo, a.imgurls imgs,a.store_id storeId,a.layout_id layoutId," +
                     "b.name layName,b.wifi layWifi,b.bedroom layBedroom,b.bed layBed,b.toilet layToilet,b.piclist laypicList,b.count laycount" );
             FROM("hotel_sku a ");

@@ -99,7 +99,6 @@ public class AccountController {
 		try {
 			if (StringUtil.isEmpty(id))
 				return RtCodeConstant.getResult("40001");
-
 			return accountService.getSettleAccount(id);
 
 		} catch (Exception e) {
