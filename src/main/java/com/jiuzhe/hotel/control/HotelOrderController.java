@@ -80,17 +80,17 @@ public class HotelOrderController {
                 res.setMessage("未已付款订单数超过最大值");
                 return res;
             }
-            //获取房间状态
+            //获取房间状态s
             Map map = hotelorderService.getReservation(query.getSkuId(), beginDt, endDt);
-            if ("0".equals(map.get("status"))) {
-                if (!"1".equals(map.get("canBeReserved"))) {
-                    res.setStatus(CommonConstant.RESERVER);
-                    res.setMessage("该房间已经被预定");
-                    return res;
-                }
-            } else {
-                throw new RuntimeException();
-            }
+//            if ("0".equals(map.get("status"))) {
+//                if (!"1".equals(map.get("canBeReserved"))) {
+//                    res.setStatus(CommonConstant.RESERVER);
+//                    res.setMessage("该房间已经被预定");
+//                    return res;
+//                }
+//            } else {
+//                throw new RuntimeException();
+//            }
             //校验通过创建订单
             OrderSuccessDto dto = hotelorderService.creatHotelOrder(query);
             res.setStatus(CommonConstant.SUCCESS);

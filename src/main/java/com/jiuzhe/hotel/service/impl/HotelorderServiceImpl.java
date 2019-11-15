@@ -72,7 +72,7 @@ public class HotelorderServiceImpl implements HotelorderService {
 
         HotelOrder order = HotelOrder.make(query);
         // 订单信息
-        order.setMerchantId(skuSearchQueryDao.getMerchantById(query.getSkuId()));
+//        order.setMerchantId(skuSearchQueryDao.getMerchantById(query.getSkuId()));
         order.setPaiedExpired(LocalDateTime.now().plusMinutes(paidExpriedtime));
         //给返回前台的对象赋值
         orderSuccessDto.setMerchantId(order.getMerchantId());
@@ -82,9 +82,9 @@ public class HotelorderServiceImpl implements HotelorderService {
         //这里需要校验前台给的价格和数据库价格是否一致
         Boolean checkPrice = this.checkPrices(order);
         //如果是商户开房则默认为true
-        if (0 == order.getOnLine()) {
-            checkPrice = true;
-        }
+//        if (0 == order.getOnLine()) {
+//            checkPrice = true;
+//        }
         if (checkPrice) {
             this.creatHotelOrder(order, this.hotelOrderDao);
         } else {
@@ -159,17 +159,8 @@ public class HotelorderServiceImpl implements HotelorderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void creatHotelOrder(HotelOrder order, HotelOrderDao hotelOrderDao) {
-        //获取订单费率
-        String url = "http://jzt-platform-core/ribbon/forbidden/fee/" + order.getMerchantId();
-//        List<String> response = restTemplate.getForObject(url, List.class);
-//        ToDO
-        List<String> response = null;
-        if (response.get(0).equals("-1")) {
-            throw new RuntimeException();
-        }
 
-        Integer fee = Integer.parseInt(response.get(1));
-        Integer platformFee = Integer.parseInt(String.valueOf(Math.round(order.getSkuPrice() * fee / 100)));
+        Integer platformFee = order.getSkuPrice();
         order.setPlatformFee(platformFee);
         hotelOrderDao.createHotelOrder(order);
         //创建成功发送消息队列
