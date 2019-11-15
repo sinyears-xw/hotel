@@ -214,7 +214,6 @@ public class HotelorderServiceImpl implements HotelorderService {
         }
         //评论完成，退押金
         if (status == OrderStatusEnum.END.getIndex()) {
-            System.out.println("999999999999999999999999");
             //修改状态（不共用，利于事务回滚）
             int backBond = hotelOrderDao.upOrderStatusById(id, status, paidCancelTime);
             String orderId = order.getId();
@@ -223,8 +222,6 @@ public class HotelorderServiceImpl implements HotelorderService {
             int fee = order.getPlatformFee() * 100;
             String merchantId = order.getMerchantId();
             String userId = order.getUserId();
-
-
             //发送退押金的请求
             if (null != order.getOnLine() && 0 == order.getOnLine()) {//0表示线下
 
@@ -294,7 +291,6 @@ public class HotelorderServiceImpl implements HotelorderService {
             Integer skuPrice = order.getSkuPrice() * 100;
             String url = "http://pay/forbidden/cancelOrder/" + orderId + "/" + skuPrice + "/" + bond + "/" + userId + "/" + merchantId;
 //            List<String> response = restTemplate.getForObject(url, List.class);
-            //                ToDO
             List<String> response = null;
             //发送请求钱需要修改数据库
             int back = hotelOrderDao.upOrderStatusById(query.getId(), OrderStatusEnum.CANCEL.getIndex(), null);

@@ -1,7 +1,9 @@
 package com.jiuzhe.hotel.constants;
 
 public enum RoomStatusEnum {
-    ON_SALE("可预定房", 1), SALED("已售出房", 2), DIRTY("脏房", 3);
+    ON_SALE("可预定房", 1),
+    SALED("已售出房", 2),
+    DIRTY("脏房", 3);
     // 成员变量
     private String desc;
     private int index;
