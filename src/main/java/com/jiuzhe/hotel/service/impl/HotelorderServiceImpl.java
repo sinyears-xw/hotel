@@ -17,6 +17,7 @@ import com.jiuzhe.hotel.module.SkuDetailQuery;
 import com.jiuzhe.hotel.service.HotelorderService;
 import com.jiuzhe.hotel.service.RoomReservationService;
 import com.jiuzhe.hotel.service.SkuSearchService;
+import com.jiuzhe.hotel.service.SqlService;
 import com.jiuzhe.hotel.utils.CheckUtil;
 import com.jiuzhe.hotel.utils.TimeUtil;
 import org.slf4j.Logger;
@@ -44,12 +45,9 @@ public class HotelorderServiceImpl implements HotelorderService {
     private static final Logger logger = LoggerFactory.getLogger(HotelorderServiceImpl.class);
     @Autowired
     private HotelOrderDao hotelOrderDao;
-    @Autowired
-    private SkuSearchQueryDao skuSearchQueryDao;
+    private
     @Autowired
     HotelorderService hotelorderService;
-    //    @Autowired
-//    RestTemplate restTemplate;
     @Autowired
     SkuSearchService skuSearchService;
     @Autowired
@@ -216,49 +214,15 @@ public class HotelorderServiceImpl implements HotelorderService {
         if (status == OrderStatusEnum.END.getIndex()) {
             //修改状态（不共用，利于事务回滚）
             int backBond = hotelOrderDao.upOrderStatusById(id, status, paidCancelTime);
-            String orderId = order.getId();
             int skuPrice = order.getSkuPrice() * 100;
             int skuBond = order.getSkuBond() * 100;
-            int fee = order.getPlatformFee() * 100;
-            String merchantId = order.getMerchantId();
             String userId = order.getUserId();
+            String amount = String.valueOf(skuPrice + skuBond);
             //发送退押金的请求
-            if (null != order.getOnLine() && 0 == order.getOnLine()) {//0表示线下
-
-                String getIdurl = "http://jzt-platform-core/user/phone?phone=" + order.getOccupantPhone();
-//                UserEntity userEntity = restTemplate.getForObject(getIdurl, UserEntity.class);
-                //                ToDO
-                UserEntity userEntity = null;
-                UserDto data = userEntity.getData();
-                if (null == data) {
-                    throw new RuntimeException();
-                }
-                userId = data.getId();
-                String url = "http://pay/forbidden/refundboss/" + orderId + "/" + skuPrice + "/" + skuBond + "/" + userId + "/" + merchantId + "/" + fee;
-//                List<String> response = restTemplate.getForObject(url, List.class);
-//                ToDO
-                List<String> response = null;
-                //Todo 处理支付反馈结果
-                if (!response.get(0).equals("36")) {
-                    throw new RuntimeException();
-                }
-                return backBond;
-            }
-
-            //发送退押金的请求
-            String url = "http://pay/forbidden/refund/" + orderId + "/" + skuPrice + "/" + skuBond + "/" + userId + "/" + merchantId + "/" + fee;
-            System.out.println(url);
-//            List<String> response = restTemplate.getForObject(url, List.class);
-            //                ToDO
-            List<String> response = null;
-            //Todo 处理支付反馈结果
-            if (!response.get(0).equals("36")) {
-                System.out.println(response.get(0) + "+++++++++++++++++++++++++++");
-                throw new RuntimeException();
-            }
+            //退钱退到账户余bond额上去
+            upUserAmount(userId, amount);
             return backBond;
         }
-        System.out.println("0000000000000000000000000000000000000000000000000000000000000000000000");
         return hotelOrderDao.upOrderStatusById(id, status, paidCancelTime);
     }
 
@@ -284,21 +248,15 @@ public class HotelorderServiceImpl implements HotelorderService {
             }
             //如果可以取消订单，则发送退钱的请求(首先需要释放房间)
             hotelOrderDao.upRoomStatus(query.getSkuId(), RoomStatusEnum.ON_SALE.getIndex());
-            String orderId = order.getId();
             Integer bond = order.getSkuBond() * 100;
             String userId = order.getUserId();
-            String merchantId = order.getMerchantId();
             Integer skuPrice = order.getSkuPrice() * 100;
-            String url = "http://pay/forbidden/cancelOrder/" + orderId + "/" + skuPrice + "/" + bond + "/" + userId + "/" + merchantId;
-//            List<String> response = restTemplate.getForObject(url, List.class);
-            List<String> response = null;
+            String amount = String.valueOf(skuPrice + bond);
+            //退钱退到账户余bond额上去
+            upUserAmount(userId, amount);
             //发送请求钱需要修改数据库
             int back = hotelOrderDao.upOrderStatusById(query.getId(), OrderStatusEnum.CANCEL.getIndex(), null);
-            if (!response.get(0).equals("55")) {
-                throw new RuntimeException();
-            }
             return back;
-
         }
         //修改订单状态（为订单取消)
         return hotelOrderDao.upOrderStatusById(query.getId(), OrderStatusEnum.CANCEL.getIndex(), null);
@@ -333,35 +291,7 @@ public class HotelorderServiceImpl implements HotelorderService {
         //先刷新用户已入住状态
         this.changStatusToLived(paidToLived);
         List<HotelOrder> hotelOrders = hotelOrderDao.getOrdersByUserId(userId);
-        String url = "http://jzt-platform-core/ribbon/userphone/" + userId;
-//        List<String> response = restTemplate.getForObject(url, List.class);
-        //                ToDO
-        List<String> response = null;
-        if (response.get(0).equals("-1")) {
-            throw new RuntimeException();
-        }
-        String userPhone = response.get(1);
-        List<HotelOrder> hotelOrderByPhone = null;
-        if (!"noUser".equals(userPhone)) {
-            hotelOrderByPhone = hotelOrderDao.getOrdersByUserPhone(userPhone);
-        }
-
-        List<HotelOrder> hotelOrderTemp = new ArrayList<>(hotelOrders);
-        for (HotelOrder order : hotelOrderByPhone) {
-            boolean exsit = false;
-            for (HotelOrder orderByid : hotelOrders) {
-                if (order.getId() == orderByid.getId()) {
-                    exsit = true;
-                    break;
-                }
-            }
-            if (order.getOnLine() == 0 && !exsit) {
-                hotelOrderTemp.add(order);
-            }
-        }
-
-
-        return hotelOrderTemp;
+        return hotelOrders;
     }
 
     /**
@@ -478,6 +408,21 @@ public class HotelorderServiceImpl implements HotelorderService {
         //卫生整体评分
         hotelOrderDao.saveSkuCleanScore(query.getSkuId(), skuCleanGrade);
         hotelOrderDao.evaluate(query);
+    }
+
+    @Autowired
+    SqlService sqlService;
+
+    //修改用户金额（提现为负，充值为正）
+    private void upUserAmount(String userId, String amount) {
+        sqlService.init().update()
+                .table("account")
+                .column("total_balance")
+                .valueI("total_balance" + amount)
+                .column("available_balance")
+                .valueI("available_balance" + amount)
+                .condition("userId = ", userId)
+                .modify();
     }
 
 }

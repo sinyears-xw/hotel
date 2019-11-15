@@ -22,19 +22,19 @@ public class AlipayServiceImpl implements AlipayService {
     private Log logger = LogFactory.getLog(this.getClass());
 
     public Map getOrder(String outtradeno, double amount, String body, String subject, String notify_url, boolean credit_forbidden) {
-        AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
-        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+            AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+            AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
 
-        model.setBody(body);
-        model.setSubject(subject);
-        model.setOutTradeNo(outtradeno);
-        model.setTimeoutExpress("30m");
-        model.setTotalAmount(String.valueOf(amount));
-        model.setProductCode("QUICK_MSECURITY_PAY");
-        if (credit_forbidden)
-            model.setDisablePayChannels("creditCard,credit_group");
-        request.setBizModel(model);
-        request.setNotifyUrl(notify_url);
+            model.setBody(body);
+            model.setSubject(subject);
+            model.setOutTradeNo(outtradeno);
+            model.setTimeoutExpress("30m");
+            model.setTotalAmount(String.valueOf(amount));
+            model.setProductCode("QUICK_MSECURITY_PAY");
+            if (credit_forbidden)
+                model.setDisablePayChannels("creditCard,credit_group");
+            request.setBizModel(model);
+            request.setNotifyUrl(notify_url);
         try {
             AlipayTradeAppPayResponse response = AlipayConfig.alipayClient.sdkExecute(request);
             return RtCodeConstant.getResult("0", response.getBody());
