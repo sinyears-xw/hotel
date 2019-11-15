@@ -162,16 +162,17 @@ public class HotelorderServiceImpl implements HotelorderService {
 
         Integer platformFee = order.getSkuPrice();
         order.setPlatformFee(platformFee);
+        order.setMerchantId("jiuzheceshi");
         hotelOrderDao.createHotelOrder(order);
         //创建成功发送消息队列
-        if (0 != order.getOnLine()) {
-            Map map = hotelorderService.sendDelay15Min(order.getId(), order.getSkuId(), order.getStartDate().toString(), order.getEndDate().toString());
-            if (!"0".equals(map.get("status"))) {
-                logger.error("消息队列发送失败");
-                throw new RuntimeException();
-            }
-        }
-
+//        if (0 != order.getOnLine()) {
+//            Map map = hotelorderService.sendDelay15Min(order.getId(), order.getSkuId(), order.getStartDate().toString(), order.getEndDate().toString());
+//            if (!"0".equals(map.get("status"))) {
+//                logger.error("消息队列发送失败");
+//                throw new RuntimeException();
+//            }
+//        }
+        setReservation(order.getSkuId(), order.getStartDate().toString(), order.getEndDate().toString());
     }
 
     /**
