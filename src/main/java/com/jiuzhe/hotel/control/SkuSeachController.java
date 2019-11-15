@@ -68,6 +68,7 @@ public class SkuSeachController {
     /**
      * @Description:点击地图图标展示预定酒店详情
      * @author:郑鹏宇
+     *
      * @date:2018/4/9
      */
     @ApiOperation(value = "查询酒店详情", notes = "点击地图弹出酒店详情使用")
