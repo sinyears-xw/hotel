@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: prod
 
   redis:
     # Redis数据库索引（默认为0）
