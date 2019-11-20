@@ -51,10 +51,12 @@ public class SkuSearchQueryProvider {
             LEFT_OUTER_JOIN("store s on b.store_id = s.id");
             WHERE("a.room_status = 1");
             if (!StringUtil.isEmptyOrNull(hotelSku.getCityName())) {
-                WHERE("a.city_name = #{cityName}");
+                String cityName = hotelSku.getCityName();
+                WHERE("a.city_name = " + "'" + cityName + "' ");
             }
             if (!StringUtil.isEmptyOrNull(hotelSku.getArea())) {
-                WHERE("a.area = #{area}");
+                String area = (hotelSku.getArea());
+                WHERE("a.area =" + "'" + area + "' ");
             }
             GROUP_BY("a.id");
             if (0 == gist) {

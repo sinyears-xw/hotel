@@ -141,24 +141,24 @@ public class HotelOrder {
         order.setOccupantName(query.getOccupantName());
         order.setOccupantCard(query.getOccupantCard());
         order.setOccupantPhone(query.getOccupantPhone());
-        if (null == query.getOnLine() || 1 == query.getOnLine()) {
-            order.setStatus(OrderStatusEnum.UNPAID.getIndex());
-        }
-        if (null != query.getOnLine() && 0 == query.getOnLine()) {
-            if (query.getStartDate().equals(LocalDate.now())) {
-                order.setStatus(OrderStatusEnum.LIVED.getIndex());
-            } else {
-                order.setStatus(OrderStatusEnum.PAID.getIndex());
-            }
-        }
+//        if (null == query.getOnLine() || 1 == query.getOnLine()) {
+        order.setStatus(OrderStatusEnum.UNPAID.getIndex());
+//        }
+//        if (null != query.getOnLine() && 0 == query.getOnLine()) {
+//            if (query.getStartDate().equals(LocalDate.now())) {
+//                order.setStatus(OrderStatusEnum.LIVED.getIndex());
+//            } else {
+//                order.setStatus(OrderStatusEnum.PAID.getIndex());
+//            }
+//        }
         // 填充通用信息
         order.setCreater(query.getUserId());
         order.setEditor(query.getUserId());
-        if (null == query.getOnLine() || 1 == query.getOnLine()) {
-            order.setOnLine(1);
-        } else {
-            order.setOnLine(0);
-        }
+//        if (null == query.getOnLine() || 1 == query.getOnLine()) {
+//            order.setOnLine(1);
+//        } else {
+//            order.setOnLine(0);
+//        }
         return order;
     }
 
