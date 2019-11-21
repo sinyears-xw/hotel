@@ -21,7 +21,8 @@ import java.util.Map;
 public interface HotelOrderMapper {
     @Insert("INSERT INTO hotel_order " +
             "(id,version,creater,create_time,editor,edit_time,remark,user_id,sku_id,sku_price," +
-            "sku_bond,start_date,end_date,merchant_id,occupant_name,occupant_id_card,occupant_phone,order_status,paied_expired_time,day_num,platform_fee) " +
+            "sku_bond,start_date,end_date,merchant_id,occupant_name,occupant_id_card,occupant_phone," +
+            "order_status,paied_expired_time,day_num,platform_fee) " +
             "VALUES " +
             "(#{id},#{version},#{creater},#{createTime},#{editor},#{editTime},#{remark}," +
             "#{userId},#{skuId},#{skuPrice},#{skuBond},#{startDate},#{endDate},#{merchantId},#{occupantName}," +
