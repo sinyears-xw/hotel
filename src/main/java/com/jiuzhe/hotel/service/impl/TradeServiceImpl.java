@@ -38,7 +38,7 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public Map deposit(String userId, String body, String subject, String channel, String depositAmount) {
         Double amount = Double.parseDouble(depositAmount);
-        Map userMap = getUserByUserId(userId, "deposit");
+        Map userMap = getUserByUserId(userId, "canDeposit");
         Map order = null;
 
         if (null == userMap) {
@@ -80,7 +80,7 @@ public class TradeServiceImpl implements TradeService {
     public Map withdraw(String userId, String withdrawAmount, String payPassword, String channel, String description) {
         long withdrewAmount = Long.parseLong(withdrawAmount);
         //校验用户信息
-        Map userMap = getUserByUserId(userId, "withdraw");
+        Map userMap = getUserByUserId(userId, "canWithdrawn");
         if (null == userMap) {
             return RtCodeConstant.getResult("20007");
         }
