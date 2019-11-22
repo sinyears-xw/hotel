@@ -211,9 +211,9 @@ public class TradeServiceImpl implements TradeService {
         if (Integer.parseInt(mAccount.get("num").toString()) != 1)
             return RtCodeConstant.getResult("10008");
 
-        jdbcTemplate.update(String.format("update account set total_balance = total_balance - ? and available_balance = available_balance - ? where user_id = '?'", fee, fee, userId));
+        jdbcTemplate.update(String.format("update account set total_balance = total_balance - ? , available_balance = available_balance - ? where user_id = '?'", fee, fee, userId));
         jdbcTemplate.update(String.format("update hotel_order set order_status = 3 where id = '?'", orderId));
-        jdbcTemplate.update(String.format("update merchant_account set profit = profit + ? and mortagage = mortagage + ? where id = '?'", fee, sku_bond, mid));
+        jdbcTemplate.update(String.format("update merchant_account set profit = profit + ? , mortagage = mortagage + ? where id = '?'", fee, sku_bond, mid));
 
         return  RtCodeConstant.getResult("0");
 
