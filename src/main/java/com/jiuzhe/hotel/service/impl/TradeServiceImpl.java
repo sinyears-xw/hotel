@@ -206,14 +206,14 @@ public class TradeServiceImpl implements TradeService {
             return RtCodeConstant.getResult("10006");
 
         String mid = order.get("merchant_id").toString();
-        sql = String.format("select count(1) num from merchant_account where id = '?' for update", mid);
+        sql = String.format("select count(1) num from merchant_account where id = '%s' for update", mid);
         Map mAccount = jdbcTemplate.queryForMap(sql);
         if (Integer.parseInt(mAccount.get("num").toString()) != 1)
             return RtCodeConstant.getResult("10008");
 
-        jdbcTemplate.update(String.format("update account set total_balance = total_balance - ? , available_balance = available_balance - ? where user_id = '?'", fee, fee, userId));
-        jdbcTemplate.update(String.format("update hotel_order set order_status = 3 where id = '?'", orderId));
-        jdbcTemplate.update(String.format("update merchant_account set profit = profit + ? , mortagage = mortagage + ? where id = '?'", fee, sku_bond, mid));
+        jdbcTemplate.update(String.format("update account set total_balance = total_balance - %d , available_balance = available_balance - %d where user_id = '%s'", fee, fee, userId));
+        jdbcTemplate.update(String.format("update hotel_order set order_status = 3 where id = '%s'", orderId));
+        jdbcTemplate.update(String.format("update merchant_account set profit = profit + %d , mortagage = mortagage + %d where id = '%s'", fee, sku_bond, mid));
 
         return  RtCodeConstant.getResult("0");
 
