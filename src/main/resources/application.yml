@@ -2,6 +2,13 @@ spring:
   profiles:
     active: dev
 
+  datasource:
+    test-while-idle: true
+    validation-query: SELECT 1 FROM DUAL
+    time-between-eviction-runs-millis: 300000
+    min-evictable-idle-time-millis: 1800000
+
+
   redis:
     # Redis数据库索引（默认为0）
     database: 0

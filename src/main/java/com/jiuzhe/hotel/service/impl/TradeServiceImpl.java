@@ -38,10 +38,10 @@ public class TradeServiceImpl implements TradeService {
     @Override
     public Map deposit(String userId, String body, String subject, String channel, String depositAmount) {
         Double amount = Double.parseDouble(depositAmount);
-        Map userMap = getUserByUserId(userId, "canDeposit");
+        Map userMap = jdbcTemplate.queryForMap(String.format("select user_id from account where user_id = '%s' and canDeposit = 1", userId));
         Map order = null;
 
-        if (null == userMap) {
+        if (null == userMap || userMap.size() == 0) {
             return RtCodeConstant.getResult("20006");
         }
 
@@ -52,7 +52,7 @@ public class TradeServiceImpl implements TradeService {
         String depositId = idService.uid();
         sqlService.init().insert().table("deposit")
                 .column("id").value(depositId)
-                .column("userId").value(userId)
+                .column("user_id").value(userId)
                 .column("amount").valueI(String.valueOf(amount))
                 .column("status").valueI(String.valueOf(1))
                 .column("updt").value(LocalDateTime.now().toString())
