@@ -141,7 +141,7 @@ public class AccountServiceImpl implements AccountService {
 
 	public Map getAccountInfo(String id) {
 		try {
-			Map account = jdbcTemplate.queryForMap("select type,total_balance,disable,available_balance from account where user_id = '" + id + "'");
+			Map account = jdbcTemplate.queryForMap("select total_balance,disable,available_balance from account where user_id = '" + id + "'");
 			return RtCodeConstant.getResult("0", account);
 		} catch (EmptyResultDataAccessException e) {
 			return RtCodeConstant.getResult("-1");
