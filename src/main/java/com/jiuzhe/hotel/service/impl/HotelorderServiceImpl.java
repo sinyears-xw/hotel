@@ -157,9 +157,6 @@ public class HotelorderServiceImpl implements HotelorderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void creatHotelOrder(HotelOrder order, HotelOrderDao hotelOrderDao) {
-
-        Integer platformFee = order.getSkuPrice();
-        order.setPlatformFee(platformFee);
         order.setMerchantId("jiuzheceshi");
         hotelOrderDao.createHotelOrder(order);
         //创建成功发送消息队列
