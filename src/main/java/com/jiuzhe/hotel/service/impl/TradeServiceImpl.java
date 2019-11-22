@@ -81,7 +81,7 @@ public class TradeServiceImpl implements TradeService {
         long withdrewAmount = Long.parseLong(withdrawAmount);
         //校验用户信息
         Map userMap = getUserByUserId(userId, "canWithdrawn");
-        if (null == userMap) {
+        if (null == userMap || userMap.get("aliName") == null || userMap.get("aliAccount") == null) {
             return RtCodeConstant.getResult("20007");
         }
 
@@ -247,7 +247,7 @@ public class TradeServiceImpl implements TradeService {
                 .valueI("total_balance" + amount)
                 .column("available_balance")
                 .valueI("available_balance" + amount)
-                .condition("userId = ", userId)
+                .condition("user_id = ", userId)
                 .modify();
     }
 
@@ -255,9 +255,9 @@ public class TradeServiceImpl implements TradeService {
     private void upUserWithdraw(String userId, String withdraw) {
         sqlService.init().update()
                 .table("account")
-                .column("canWithdraw")
-                .value(withdraw)
-                .condition("userId = ", userId)
+                .column("canWithdrawn")
+                .valueI(withdraw)
+                .condition("user_id = ", userId)
                 .modify();
     }
 
