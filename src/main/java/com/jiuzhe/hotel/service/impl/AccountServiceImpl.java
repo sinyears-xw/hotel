@@ -74,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
 		if (StringUtil.isEmpty(userId))
 			return RtCodeConstant.getResult("40001");
 
-		jdbcTemplate.update(String.format("UPDATE account SET aliAccount = '' and aliName = ''  where user_id='%s' and channel='alipay'",userId));
+		jdbcTemplate.update(String.format("UPDATE account SET aliAccount = '' and aliName = ''  where user_id='%s' ",userId));
 
 		return RtCodeConstant.getResult("0");
 	}		

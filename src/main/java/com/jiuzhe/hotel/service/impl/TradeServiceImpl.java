@@ -219,6 +219,7 @@ public class TradeServiceImpl implements TradeService {
 
     }
 
+
     //获取有权限存取的账户，如果有则返回，没有则是null
     private Map getUserByUserId(String userId, String depositOrWithdraw) {
         try {
