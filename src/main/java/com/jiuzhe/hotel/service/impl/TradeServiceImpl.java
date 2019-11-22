@@ -226,7 +226,7 @@ public class TradeServiceImpl implements TradeService {
             Map query = sqlService.init().select()
                     .table("account")
                     .column("*")
-                    .condition("user_id ", userId)
+                    .condition("user_id = ", userId)
                     .end(" for update ")
                     .queryMap();
             if (null != query && "1".equals(query.get(depositOrWithdraw).toString())) {
