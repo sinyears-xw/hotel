@@ -121,7 +121,7 @@ public class AccountServiceImpl implements AccountService {
             return RtCodeConstant.getResult("40001");
 
         Map accountPasswd = jdbcTemplate.queryForMap("select passwd from account where user_id = '" + userId + "' for update");
-        if (accountPasswd == null || accountPasswd.size() == 0) {
+        if (accountPasswd == null || accountPasswd.size() == 0 || accountPasswd.get("passwd") == null) {
 
         } else {
             oldPasswd = param.get("old_passwd").toString();
