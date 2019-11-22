@@ -8,6 +8,7 @@ import com.jiuzhe.hotel.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,9 @@ public class TradeServiceImpl implements TradeService {
 
     @Autowired
     AlipayService alipayService;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
 
     //充值
@@ -161,6 +165,57 @@ public class TradeServiceImpl implements TradeService {
                 .modify();
         //修改用户金额
         upUserAmount(userId, "+" + amount);
+
+    }
+
+    @Transactional
+    public Map charge(String userId, String orderId, String payPassword) {
+        String sql = String.format("select available_balance, passwd " +
+                "from account where disable = 0 and user_id = '%s' for update", userId);
+        Map account = jdbcTemplate.queryForMap(sql);
+        if (account == null || account.size() == 0) {
+            return  RtCodeConstant.getResult("-1");
+        }
+
+        long money = Long.parseLong(account.get("available_balance").toString());
+        if (money < 0)
+            return RtCodeConstant.getResult("40001");
+
+        String passwd = account.get("passwd").toString();
+        if (passwd == null)
+            return RtCodeConstant.getResult("20008");
+        else if (!passwd.equals(payPassword))
+            return RtCodeConstant.getResult("10007");
+
+        sql = String.format("select sku_price + sku_bond fee, sku_bond, merchant_id, cast(order_status as signed) as order_status " +
+                "from hotel_order where id = '%s' for update", orderId);
+        Map order = jdbcTemplate.queryForMap(sql);
+        if (order == null || order.size() == 0)
+            return  RtCodeConstant.getResult("40002");
+
+
+        int order_status = Integer.parseInt(order.get("order_status").toString());
+        if (order_status != 1)
+            return  RtCodeConstant.getResult("40003");
+
+        long fee = Long.parseLong(order.get("fee").toString());
+        long sku_bond = Long.parseLong(order.get("sku_bond").toString());
+        if (fee < 0 || sku_bond < 0)
+            return RtCodeConstant.getResult("40001");
+        if (money < fee)
+            return RtCodeConstant.getResult("10006");
+
+        String mid = order.get("merchant_id").toString();
+        sql = String.format("select count(1) num from merchant_account where id = '?' for update", mid);
+        Map mAccount = jdbcTemplate.queryForMap(sql);
+        if (Integer.parseInt(mAccount.get("num").toString()) != 1)
+            return RtCodeConstant.getResult("10008");
+
+        jdbcTemplate.update(String.format("update account set total_balance = total_balance - ? and available_balance = available_balance - ? where user_id = '?'", fee, fee, userId));
+        jdbcTemplate.update(String.format("update hotel_order set order_status = 3 where id = '?'", orderId));
+        jdbcTemplate.update(String.format("update merchant_account set profit = profit + ? and mortagage = mortagage + ? where id = '?'", fee, sku_bond, mid));
+
+        return  RtCodeConstant.getResult("0");
 
     }
 

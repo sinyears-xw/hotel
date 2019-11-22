@@ -109,5 +109,25 @@ public class TradeController {
 
     }
 
+    /**
+     * Description:支付订单
+     * Author:
+     * Date: 2019/4/12 10:53
+     */
+    @RequestMapping(value = "/charge", method = RequestMethod.POST)
+    public Map charge(@RequestBody Map parms) {
+        try {
+            String userId = parms.get("userId").toString();
+            String orderId = parms.get("orderId").toString();
+            String payPassword = parms.get("passwd").toString();
+
+            return tradeService.charge(userId, orderId, payPassword);
+        } catch (Exception e) {
+            return RtCodeConstant.getResult("-1");
+        }
+
+    }
+
+
 
 }

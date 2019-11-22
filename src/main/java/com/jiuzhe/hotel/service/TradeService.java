@@ -7,5 +7,7 @@ public interface TradeService {
 
     Map withdraw(String userId, String withdrawAmount, String payPassword, String channel, String description);
 
+    Map charge(String userId, String orderId, String payPassword);
+
     void updateDepositStatus(String outTradeNo, long amount);
 }
