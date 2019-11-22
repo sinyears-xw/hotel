@@ -150,7 +150,7 @@ public class AccountServiceImpl implements AccountService {
 
 
 	public Map getSettleAccount(String id) {
-		String sql = String.format("select aliAccount, aliName from settle_account where user_id = '%s' ",id);
+		String sql = String.format("select aliAccount, aliName from account where user_id = '%s' ",id);
 		List<Map<String, Object>> products = jdbcTemplate.queryForList(sql);
 		return RtCodeConstant.getResult("0", products);
 	}
