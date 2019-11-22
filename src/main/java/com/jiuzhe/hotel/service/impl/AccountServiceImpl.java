@@ -101,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
 
 		switch (channel) {
 			case "alipay":
-				jdbcTemplate.update(String.format("update account set aliAccount='%s',aliName='%s' where user_id='%s' and channel='%s'", recipient_account, recipient_name, userId, channel));
+				jdbcTemplate.update(String.format("update account set aliAccount='%s',aliName='%s' where user_id='%s'", recipient_account, recipient_name, userId, channel));
 				break;
 		}
 		return RtCodeConstant.getResult("0");
