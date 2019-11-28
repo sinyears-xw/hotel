@@ -49,10 +49,11 @@ hotel:
   order:
     paied:
       expired-time: 15
-      cancel-time : 120
+      cancel-time: 120
     user:
       max-num: 2
 
 uid:
   workerId: 0
   datacenterId: 0
+filtertoken: false
