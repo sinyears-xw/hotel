@@ -16,6 +16,7 @@ import com.jiuzhe.hotel.service.SkuSearchService;
 import com.jiuzhe.hotel.utils.DatePriceUtil;
 import com.jiuzhe.hotel.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,6 +37,9 @@ public class SkuSearchServiceImpl implements SkuSearchService {
     SkuSearchQueryDao skuSearchQueryDao;
     @Autowired
     HotelorderService hotelorderService;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     /**
      * @Description:
@@ -184,5 +188,12 @@ public class SkuSearchServiceImpl implements SkuSearchService {
     @Override
     public String getPhoneBySkuId(String skuId) {
         return skuSearchQueryDao.getPhoneBySkuId(skuId);
+    }
+
+    public String getMerchantPhone(String id) {
+        String sql = "SELECT phone FROM merchant_account WHERE id = '%s'";
+        sql = String.format(sql, id);
+        Map map = jdbcTemplate.queryForMap(sql);
+        return map.get("phone").toString();
     }
 }

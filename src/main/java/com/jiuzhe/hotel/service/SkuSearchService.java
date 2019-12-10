@@ -61,9 +61,11 @@ public interface SkuSearchService {
     List<String> getAllimgsFromDb();
 
     /**
-    * @Description:
-    * @Author: luan
-    * @Date: 2018/11/7/007
-    */
+     * @Description:
+     * @Author: luan
+     * @Date: 2018/11/7/007
+     */
     String getPhoneBySkuId(String skuId);
+
+    String getMerchantPhone(String id);
 }

@@ -68,7 +68,6 @@ public class SkuSeachController {
     /**
      * @Description:点击地图图标展示预定酒店详情
      * @author:郑鹏宇
-     *
      * @date:2018/4/9
      */
     @ApiOperation(value = "查询酒店详情", notes = "点击地图弹出酒店详情使用")
@@ -136,13 +135,13 @@ public class SkuSeachController {
         return responseBase;
     }
 
-   /**
-   * @Description:  根据房号查询门店电话
-   * @Author: luan
-   * @Date: 2018/11/7/007
-   */
+    /**
+     * @Description: 根据房号查询门店电话
+     * @Author: luan
+     * @Date: 2018/11/7/007
+     */
     @GetMapping("/phone/{skuId}")
-    public ResponseBase<String> getPhoneBySkuId(@PathVariable String skuId){
+    public ResponseBase<String> getPhoneBySkuId(@PathVariable String skuId) {
 
         ResponseBase<String> responseBase = new ResponseBase<>();
         try {
@@ -151,7 +150,22 @@ public class SkuSeachController {
             if (null == phone) responseBase.setMessage("该门店没有预留电话！");
             responseBase.setData(phone);
 
-        }catch (Exception e){
+        } catch (Exception e) {
+            responseBase.setStatus(CommonConstant.FAIL);
+            logger.error("查询门店电话异常！", e);
+        }
+        return responseBase;
+    }
+
+    @GetMapping("/merchantPhone/{id}")
+    public ResponseBase<String> getMerchantPhone(@PathVariable String id) {
+        ResponseBase<String> responseBase = new ResponseBase<>();
+        try {
+            String phone = skuSearchService.getMerchantPhone(id);
+            responseBase.setStatus(CommonConstant.SUCCESS);
+            responseBase.setData(phone);
+            return responseBase;
+        } catch (Exception e) {
             responseBase.setStatus(CommonConstant.FAIL);
             logger.error("查询门店电话异常！", e);
         }
