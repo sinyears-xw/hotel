@@ -10,17 +10,18 @@ import io.swagger.annotations.ApiModel;
 @ApiModel(value="searchQuery",description="查询所需要的属性条件")
 public class SearchQuery {
     /**
+     * 日期范围
+     */
+    private String startDate;
+    private String endDate;
+    /**
      * 经纬度范围
      */
     private Integer beginLng;
     private Integer endLng;
     private Integer beginLat;
     private Integer endLat;
-    /**
-     * 日期范围
-     */
-    private String startDate;
-    private String endDate;
+
     /**
      * 价格范围
      */
