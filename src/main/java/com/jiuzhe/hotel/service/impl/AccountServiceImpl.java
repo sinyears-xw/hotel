@@ -120,8 +120,10 @@ public class AccountServiceImpl implements AccountService {
         if (StringUtil.isEmpty(newPasswd))
             return RtCodeConstant.getResult("40001");
 
+        int forget = Integer.parseInt(param.get("forget").toString());
+
         Map accountPasswd = jdbcTemplate.queryForMap("select passwd from account where user_id = '" + userId + "' for update");
-        if (accountPasswd == null || accountPasswd.size() == 0 || accountPasswd.get("passwd") == null) {
+        if (accountPasswd == null || accountPasswd.size() == 0 || accountPasswd.get("passwd") == null || forget == 1) {
 
         } else {
             oldPasswd = param.get("old_passwd").toString();
