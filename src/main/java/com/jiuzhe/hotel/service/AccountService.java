@@ -13,6 +13,8 @@ public interface AccountService {
 
     public Map updatePasswd(Map param);
 
+    public Map getbackPasswd(Map param);
+
     public Map checkPasswd(Map param);
 
 

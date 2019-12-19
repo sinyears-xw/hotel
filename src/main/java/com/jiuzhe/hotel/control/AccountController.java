@@ -63,6 +63,21 @@ public class AccountController {
 		}	
 	}
 
+	@RequestMapping(value = "/getbackpasswd", method = RequestMethod.POST)
+	@ResponseBody
+	public Map getbackPasswd(@RequestBody Map param) {
+		try {
+			if (param == null)
+				return RtCodeConstant.getResult("40001");
+
+			return accountService.getbackPasswd(param);
+
+		} catch (Exception e) {
+			logger.error(e);
+			return RtCodeConstant.getResult("-1");
+		}
+	}
+
 	@RequestMapping(value = "/checkpasswd", method = RequestMethod.POST)
 	@ResponseBody
 	public Map checkpasswd(@RequestBody Map param) {

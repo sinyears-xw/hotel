@@ -107,6 +107,25 @@ public class AccountServiceImpl implements AccountService {
         return RtCodeConstant.getResult("0");
     }
 
+    @Transactional
+    public Map getbackPasswd(Map param) {
+        String userId = param.get("user_id").toString();
+
+        if (StringUtil.isEmpty(userId))
+            return RtCodeConstant.getResult("40001");
+
+        String newPasswd = param.get("new_passwd").toString();
+        if (StringUtil.isEmpty(newPasswd))
+            return RtCodeConstant.getResult("40001");
+
+        Map accountPasswd = jdbcTemplate.queryForMap("select passwd from account where user_id = '" + userId + "' for update");
+        if (accountPasswd == null || accountPasswd.size() == 0)
+            return RtCodeConstant.getResult("10001");
+
+        jdbcTemplate.update(String.format("update account set passwd = '%s', updt = now() where user_id = '%s'", newPasswd, userId));
+        return RtCodeConstant.getResult("0");
+    }
+
 
     @Transactional
     public Map updatePasswd(Map param) {
@@ -120,10 +139,8 @@ public class AccountServiceImpl implements AccountService {
         if (StringUtil.isEmpty(newPasswd))
             return RtCodeConstant.getResult("40001");
 
-        int forget = Integer.parseInt(param.get("forget").toString());
-
         Map accountPasswd = jdbcTemplate.queryForMap("select passwd from account where user_id = '" + userId + "' for update");
-        if (accountPasswd == null || accountPasswd.size() == 0 || accountPasswd.get("passwd") == null || forget == 1) {
+        if (accountPasswd == null || accountPasswd.size() == 0 || accountPasswd.get("passwd") == null) {
 
         } else {
             oldPasswd = param.get("old_passwd").toString();
