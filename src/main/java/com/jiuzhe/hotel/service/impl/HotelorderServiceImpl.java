@@ -19,6 +19,7 @@ import com.jiuzhe.hotel.service.RoomReservationService;
 import com.jiuzhe.hotel.service.SkuSearchService;
 import com.jiuzhe.hotel.service.SqlService;
 import com.jiuzhe.hotel.utils.CheckUtil;
+import com.jiuzhe.hotel.utils.StringUtil;
 import com.jiuzhe.hotel.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -178,12 +179,12 @@ public class HotelorderServiceImpl implements HotelorderService {
     @Override
     public HotelOrder getOrderById(String id) {
         HotelOrder hotelOrder = hotelOrderDao.getOrderById(id);
-//        if (null != hotelOrder) {
-//            //TODO 获取照片
-//            Map<String, String> imgMap = hotelOrderDao.getImgsBySkuId(hotelOrder.getSkuId());
-//            List<String> imgs = StringUtil.stringToList(imgMap.get("imgurls"));
-//            hotelOrder.setSkuImg(imgs.get(0));
-//        }
+        if (null != hotelOrder) {
+            //TODO 获取照片
+            Map<String, String> imgMap = hotelOrderDao.getImgsBySkuId(hotelOrder.getSkuId());
+            List<String> imgs = StringUtil.stringToList(imgMap.get("imgurls"));
+            hotelOrder.setSkuImg(imgs.get(0));
+        }
         return hotelOrder;
     }
 

@@ -200,6 +200,34 @@ public class HotelOrderController {
         }
         return responseBase;
     }
+    /**
+     * @Description:通过订单id获取订单
+     * @author:郑鹏宇
+     * @date:2018/4/16
+     */
+    @ApiOperation(value = "通过订单id获取订单信息", notes = "通过订单id获取订单信息")
+    @PostMapping("/id")
+    public ResponseBase<OrderDto> getOrderbyId(
+            @ApiParam(name = "Map<String,String>", value = "id:1") @RequestBody Map<String, String> map) {
+        ResponseBase<OrderDto> responseBase = new ResponseBase<>();
+        String id = map.get("id");
+        if (StringUtil.isEmptyOrNull(id)) {
+            responseBase.setStatus(CommonConstant.ID_EMPTY);
+            responseBase.setMessage("id为空");
+            return responseBase;
+        }
+        try {
+            HotelOrder order = hotelorderService.getOrderById(id);
+            OrderDto dto = OrderDto.make(order);
+            responseBase.setStatus(CommonConstant.SUCCESS);
+            responseBase.setData(dto);
+        } catch (Exception e) {
+            logger.error("getOrderById failed!", e);
+            responseBase.setStatus(CommonConstant.FAIL);
+            responseBase.setMessage("异常");
+        }
+        return responseBase;
+    }
 
     /**
      * @Description:获取订单倒计时
@@ -207,8 +235,8 @@ public class HotelOrderController {
      * @date:2018/4/26
      */
     @ApiOperation(value = "获取倒计时", notes = "获取倒计时")
-    @GetMapping("/countdown")
-    public ResponseBase<Map<String, Integer>> getCountDown(@RequestParam(required = true) String id) {
+    @GetMapping("/countdown/{id}")
+    public ResponseBase<Map<String, Integer>> getCountDown(@PathVariable String id) {
         ResponseBase<Map<String, Integer>> responseBase = new ResponseBase<>();
         try {
             Integer second = hotelorderService.getCountDown(id);
