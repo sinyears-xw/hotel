@@ -114,7 +114,7 @@ public class HotelOrderController {
             @ApiParam(name = "Map<id,status>", value = "id:1,status:2") @RequestBody Map<String, String> map) {
         String id = map.get("id");
         Integer status = Integer.valueOf(map.get("status"));
-	System.out.println(id+"================"+status);
+        System.out.println(id + "================" + status);
         ResponseBase responseBase = new ResponseBase();
         if (!StringUtil.isEmptyOrNull(id) && null != status) {
             try {
@@ -200,6 +200,7 @@ public class HotelOrderController {
         }
         return responseBase;
     }
+
     /**
      * @Description:通过订单id获取订单
      * @author:郑鹏宇
@@ -235,8 +236,8 @@ public class HotelOrderController {
      * @date:2018/4/26
      */
     @ApiOperation(value = "获取倒计时", notes = "获取倒计时")
-    @GetMapping("/countdown/{id}")
-    public ResponseBase<Map<String, Integer>> getCountDown(@PathVariable String id) {
+    @GetMapping("/countdown")
+    public ResponseBase<Map<String, Integer>> getCountDown(@RequestParam(value = "id") String id) {
         ResponseBase<Map<String, Integer>> responseBase = new ResponseBase<>();
         try {
             Integer second = hotelorderService.getCountDown(id);
