@@ -157,8 +157,9 @@ public class SkuSeachController {
         return responseBase;
     }
 
-    @GetMapping("/merchantPhone/{id}")
-    public ResponseBase<String> getMerchantPhone(@PathVariable String id) {
+    @PostMapping("/merchantPhone")
+    public ResponseBase<String> getMerchantPhone(@RequestBody Map map) {
+        String id = map.get("merchantId").toString();
         ResponseBase<String> responseBase = new ResponseBase<>();
         try {
             String phone = skuSearchService.getMerchantPhone(id);
