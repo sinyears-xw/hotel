@@ -47,7 +47,7 @@ public interface SkuSearchQueryMapper {
      */
     @Select("<script> " +
             "SELECT a.score,a.room_status, a.id,a.room_bond, s.storePic storePic,s.ReceptionPic receptionPic, s.name sku_name,a.address,a.lng,a.remark," +
-            "a.lat,a.merchant_id,a.room_price,b.name room_type,a.wifi,a.bedroom_num,a.city_name,a.area," +
+            "a.lat,a.merchant_id,a.room_price,b.name, a.room_type,a.wifi,a.bedroom_num,a.city_name,a.area," +
             "a.toilet_num,a.room_no,a.bed_num,a.imgurls urls," +
             "b.name layName,b.wifi layWifi,b.bedroom layBedroom,b.bed layBed,b.toilet layToilet," +
             "b.piclist  laypicList,b.count laycount " +
