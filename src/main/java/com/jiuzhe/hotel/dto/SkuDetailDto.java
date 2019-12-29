@@ -60,7 +60,7 @@ public class SkuDetailDto {
     /**
      * 房间类型
      */
-    private String roomType;
+    private Integer roomType;
 
     /**
      * 无线
@@ -129,7 +129,7 @@ public class SkuDetailDto {
         skuDetailDto.setId(skuDetail.getId());
         skuDetailDto.setSkuName(skuDetail.getSkuName());
         skuDetailDto.setAddress(skuDetail.getAddress());
-        skuDetailDto.setRoomType(skuDetail.getRoomType());
+        skuDetailDto.setRoomType(Integer.parseInt(skuDetail.getRoomType()));
         if (null != skuDetail.getWifi()) {
             skuDetailDto.setWifi(skuDetail.getWifi());
         } else {
@@ -150,9 +150,10 @@ public class SkuDetailDto {
         } else {
             skuDetailDto.setBedNum(skuDetail.getLayBed());
         }
-        if(null != skuDetail.getStorePic()){
+        if (null != skuDetail.getStorePic()) {
             skuDetailDto.setStorePic(skuDetail.getStorePic());
-        }else if (null != skuDetail.getUrls()) {
+        }
+        if (null != skuDetail.getUrls()) {
             skuDetailDto.setUrls(StringUtil.stringToList(skuDetail.getUrls()));
         } else {
             skuDetailDto.setUrls(StringUtil.stringToList(skuDetail.getLaypicList()));
@@ -311,11 +312,11 @@ public class SkuDetailDto {
         this.address = address;
     }
 
-    public String getRoomType() {
+    public Integer getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(String roomType) {
+    public void setRoomType(Integer roomType) {
         this.roomType = roomType;
     }
 
