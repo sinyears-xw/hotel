@@ -175,4 +175,34 @@ public class SkuSeachController {
         }
         return responseBase;
     }
+
+    @PostMapping("/roomstatus")
+    public ResponseBase getRoomstatus(@RequestBody Map map) {
+        String id = map.get("id").toString();
+        String startDate = map.get("startDate").toString();
+        String endDate = map.get("endDate").toString();
+        ResponseBase responseBase = new ResponseBase<>();
+        try {
+            Map resultMap = hotelorderService.getReservation(id, startDate, endDate);
+            if ("0".equals(resultMap.get("status"))) {
+                List data = (List) resultMap.get("data");
+                String canBeReserved = data.get(1).toString();
+                if (!"1".equals(canBeReserved)) {
+                    responseBase.setStatus(CommonConstant.RESERVER);
+                    responseBase.setMessage("该房间已经被预定");
+                    return responseBase;
+                }
+            } else {
+                throw new RuntimeException();
+            }
+            responseBase.setStatus(CommonConstant.SUCCESS);
+            return responseBase;
+        } catch (Exception e) {
+            responseBase.setStatus(CommonConstant.FAIL);
+            logger.error("查询店铺入住状态异常！", e);
+        }
+        return responseBase;
+    }
+
+
 }
