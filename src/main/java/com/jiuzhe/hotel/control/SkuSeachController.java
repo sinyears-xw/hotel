@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -158,13 +159,15 @@ public class SkuSeachController {
     }
 
     @PostMapping("/merchantPhone")
-    public ResponseBase<String> getMerchantPhone(@RequestBody Map map) {
+    public ResponseBase getMerchantPhone(@RequestBody Map map) {
         String id = map.get("merchantId").toString();
-        ResponseBase<String> responseBase = new ResponseBase<>();
+        ResponseBase responseBase = new ResponseBase<>();
         try {
             String phone = skuSearchService.getMerchantPhone(id);
+            Map resulyMap = new HashMap();
+            resulyMap.put("phone", phone);
             responseBase.setStatus(CommonConstant.SUCCESS);
-            responseBase.setData(phone);
+            responseBase.setData(resulyMap);
             return responseBase;
         } catch (Exception e) {
             responseBase.setStatus(CommonConstant.FAIL);
