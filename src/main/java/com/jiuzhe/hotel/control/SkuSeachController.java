@@ -188,14 +188,20 @@ public class SkuSeachController {
                 List data = (List) resultMap.get("data");
                 String canBeReserved = data.get(1).toString();
                 if (!"1".equals(canBeReserved)) {
-                    responseBase.setStatus(CommonConstant.RESERVER);
-                    responseBase.setMessage("该房间已经被预定");
+                    responseBase.setStatus(CommonConstant.SUCCESS);
+                    responseBase.setData(new HashMap() {{
+                        put("status", 2);
+                    }});
+                    responseBase.setMessage("该房间已经被预  定");
                     return responseBase;
                 }
             } else {
                 throw new RuntimeException();
             }
             responseBase.setStatus(CommonConstant.SUCCESS);
+            responseBase.setData(new HashMap() {{
+                put("status", 1);
+            }});
             return responseBase;
         } catch (Exception e) {
             responseBase.setStatus(CommonConstant.FAIL);
