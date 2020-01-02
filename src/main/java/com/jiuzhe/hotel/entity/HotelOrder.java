@@ -141,6 +141,7 @@ public class HotelOrder {
         order.setOccupantName(query.getOccupantName());
         order.setOccupantCard(query.getOccupantCard());
         order.setOccupantPhone(query.getOccupantPhone());
+        order.setMerchantId(query.getMerchantId());
 //        if (null == query.getOnLine() || 1 == query.getOnLine()) {
         order.setStatus(OrderStatusEnum.UNPAID.getIndex());
 //        }

@@ -7,32 +7,41 @@ import java.time.LocalDate;
 
 public class HotelOrderQuery implements Serializable {
     private static final long serialVersionUID = -7735766356188951273L;
-    @ApiModelProperty(value="订单id",example="87d9fe4238f74d84be15d62984fdfe65")
+    @ApiModelProperty(value = "订单id", example = "87d9fe4238f74d84be15d62984fdfe65")
     private String id;
-    @ApiModelProperty(value="用户id",example="87d9fe4238f74d84be15d62984fdfe65")
+    @ApiModelProperty(value = "用户id", example = "87d9fe4238f74d84be15d62984fdfe65")
     private String userId;
-    @ApiModelProperty(value="房间id",example="87d9fe4238f74d84be15d62984fdfe66")
+    @ApiModelProperty(value = "房间id", example = "87d9fe4238f74d84be15d62984fdfe66")
     private String skuId;
-    @ApiModelProperty(value="房间总价",example="5096")
+    @ApiModelProperty(value = "房间总价", example = "5096")
     private Integer skuPrice;
-    @ApiModelProperty(value="押金",example="200")
+    @ApiModelProperty(value = "押金", example = "200")
     private Integer skuBond;
-    @ApiModelProperty(value="开始日期",example="2018-05-01")
+    @ApiModelProperty(value = "开始日期", example = "2018-05-01")
     private LocalDate startDate;
-    @ApiModelProperty(value="结束日期",example="2018-05-03")
+    @ApiModelProperty(value = "结束日期", example = "2018-05-03")
     private LocalDate endDate;
-    @ApiModelProperty(value="入住人姓名",example="张三")
+    @ApiModelProperty(value = "入住人姓名", example = "张三")
     private String occupantName;
-    @ApiModelProperty(value="入住人身份证",example="420104***********************")
+    @ApiModelProperty(value = "入住人身份证", example = "420104***********************")
     private String occupantCard;
-    @ApiModelProperty(value="入住人电话",example="13711111111")
+    @ApiModelProperty(value = "入住人电话", example = "13711111111")
     private String occupantPhone;
-    @ApiModelProperty(value="入住天数",example="2")
+    @ApiModelProperty(value = "入住天数", example = "2")
     private Integer dayNum;
-    @ApiModelProperty(value="vip级别",example="2")
+    @ApiModelProperty(value = "vip级别", example = "2")
     private Integer vipLevel;
+
+    private String merchantId;
     private Integer onLine;
 
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
 
     public Integer getOnLine() {
         return onLine;
