@@ -70,7 +70,9 @@ public class SkuSearchServiceImpl implements SkuSearchService {
             dto.setStatus(dto.getDefStatus());
             Map map = hotelorderService.getReservation(dto.getId(), searchQuery.getStartDate(), searchQuery.getEndDate());
             if ("0".equals(map.get("status"))) {
-                if (!"1".equals(map.get("canBeReserved"))) {
+                List data = (List) map.get("data");
+                String canBeReserved = data.get(1).toString();
+                if (!"1".equals(canBeReserved)) {
                     dto.setStatus(RoomStatusEnum.SALED.getIndex());
                 }
             } else {
