@@ -257,7 +257,13 @@ public class HotelorderServiceImpl implements HotelorderService {
             return back;
         }
         //修改订单状态（为订单取消)
-        return hotelOrderDao.upOrderStatusById(query.getId(), OrderStatusEnum.CANCEL.getIndex(), null);
+        int upNum = hotelOrderDao.upOrderStatusById(query.getId(), OrderStatusEnum.CANCEL.getIndex(), null);
+        //订单取消需要释放房间
+        if (upNum == 1) {
+            unsetReservation(query.getSkuId(), query.getStartDate(), query.getEndDate());
+        }
+        return upNum;
+
     }
 
     /**
