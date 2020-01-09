@@ -174,7 +174,7 @@ public class TradeServiceImpl implements TradeService {
                 "from account where disable = 0 and user_id = '%s' for update", userId);
         Map account = jdbcTemplate.queryForMap(sql);
         if (account == null || account.size() == 0) {
-            return  RtCodeConstant.getResult("-1");
+            return  RtCodeConstant.getResult("10001");
         }
 
         long money = Long.parseLong(account.get("available_balance").toString());
