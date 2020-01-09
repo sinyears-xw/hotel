@@ -123,6 +123,7 @@ public class TradeController {
 
             return tradeService.charge(userId, orderId, payPassword);
         } catch (Exception e) {
+            logger.info(e.getMessage());
             return RtCodeConstant.getResult("-1");
         }
 
