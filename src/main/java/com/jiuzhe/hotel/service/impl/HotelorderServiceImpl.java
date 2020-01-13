@@ -85,6 +85,9 @@ public class HotelorderServiceImpl implements HotelorderService {
 //            checkPrice = true;
 //        }
         if (checkPrice) {
+            //需要把价格变成分
+            order.setSkuBond(order.getSkuBond() * 100);
+            order.setSkuPrice(order.getSkuPrice() * 100);
             this.creatHotelOrder(order, this.hotelOrderDao);
         } else {
             throw new RuntimeException("price is erro");
