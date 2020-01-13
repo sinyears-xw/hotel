@@ -218,7 +218,7 @@ public class TradeServiceImpl implements TradeService {
         sql = String.format("update account set total_balance = total_balance - %d , available_balance = available_balance - %d where user_id = '%s'", fee, fee, userId);
         jdbcTemplate.update(sql);
         LocalDateTime paidCancelTime = LocalDateTime.now().plusMinutes(paidCanceltime);
-        jdbcTemplate.update(String.format("update hotel_order set order_status = 3  and paid_cancel_time = '%s'  where id = '%s'", paidCancelTime.toString(), orderId));
+        jdbcTemplate.update(String.format("update hotel_order set order_status =3 ,paid_cancel_time = '%s' where id = '%s'", paidCancelTime.toString(), orderId));
         jdbcTemplate.update(String.format("update merchant_account set profit = profit + %d , mortagage = mortagage + %d where id = '%s'", fee - sku_bond, sku_bond, mid));
 
         return RtCodeConstant.getResult("0");
