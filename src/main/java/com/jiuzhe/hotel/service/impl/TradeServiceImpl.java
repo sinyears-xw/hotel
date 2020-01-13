@@ -8,6 +8,7 @@ import com.jiuzhe.hotel.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,9 @@ import java.util.Map;
 public class TradeServiceImpl implements TradeService {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+
+    @Value("${hotel.order.paied.cancel-time}")
+    private int paidCanceltime;
     @Autowired
     SqlService sqlService;
 
@@ -174,7 +178,7 @@ public class TradeServiceImpl implements TradeService {
                 "from account where disable = 0 and user_id = '%s' for update", userId);
         Map account = jdbcTemplate.queryForMap(sql);
         if (account == null || account.size() == 0) {
-            return  RtCodeConstant.getResult("10001");
+            return RtCodeConstant.getResult("10001");
         }
 
         long money = Long.parseLong(account.get("available_balance").toString());
@@ -191,12 +195,12 @@ public class TradeServiceImpl implements TradeService {
                 "from hotel_order where id = '%s' for update", orderId);
         Map order = jdbcTemplate.queryForMap(sql);
         if (order == null || order.size() == 0)
-            return  RtCodeConstant.getResult("40002");
+            return RtCodeConstant.getResult("40002");
 
 
         int order_status = Integer.parseInt(order.get("order_status").toString());
         if (order_status != 1)
-            return  RtCodeConstant.getResult("40003");
+            return RtCodeConstant.getResult("40003");
 
         long fee = Long.parseLong(order.get("fee").toString());
         long sku_bond = Long.parseLong(order.get("sku_bond").toString());
@@ -213,10 +217,11 @@ public class TradeServiceImpl implements TradeService {
 
         sql = String.format("update account set total_balance = total_balance - %d , available_balance = available_balance - %d where user_id = '%s'", fee, fee, userId);
         jdbcTemplate.update(sql);
-        jdbcTemplate.update(String.format("update hotel_order set order_status = 3 where id = '%s'", orderId));
+        LocalDateTime paidCancelTime = LocalDateTime.now().plusMinutes(paidCanceltime);
+        jdbcTemplate.update(String.format("update hotel_order set order_status = 3  and paid_cancel_time = '%s'  where id = '%s'", orderId), paidCancelTime.toString());
         jdbcTemplate.update(String.format("update merchant_account set profit = profit + %d , mortagage = mortagage + %d where id = '%s'", fee - sku_bond, sku_bond, mid));
 
-        return  RtCodeConstant.getResult("0");
+        return RtCodeConstant.getResult("0");
 
     }
 
