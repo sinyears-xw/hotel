@@ -424,6 +424,9 @@ public class HotelorderServiceImpl implements HotelorderService {
 
     //修改用户金额（提现为负，充值为正）
     private void upUserAmount(String userId, String amount) {
+        if (!amount.contains("-")) {
+            amount = "+" + amount;
+        }
         sqlService.init().update()
                 .table("account")
                 .column("total_balance")
