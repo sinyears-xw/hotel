@@ -3,7 +3,6 @@ package com.jiuzhe.hotel.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.jiuzhe.hotel.config.AlipayConfig;
-import com.jiuzhe.hotel.constants.OrderStatusEnum;
 import com.jiuzhe.hotel.constants.RtCodeConstant;
 import com.jiuzhe.hotel.service.*;
 import org.slf4j.Logger;
@@ -219,7 +218,7 @@ public class TradeServiceImpl implements TradeService {
         sql = String.format("update account set total_balance = total_balance - %d , available_balance = available_balance - %d where user_id = '%s'", fee, fee, userId);
         jdbcTemplate.update(sql);
         LocalDateTime paidCancelTime = LocalDateTime.now().plusMinutes(paidCanceltime);
-        jdbcTemplate.update(String.format("update hotel_order set order_status = %d ,paid_cancel_time = '%s' where id = '%s'", OrderStatusEnum.PAID.getIndex(), paidCancelTime.toString(), orderId));
+        jdbcTemplate.update(String.format("update hotel_order set order_status =3 ,paid_cancel_time = '%s' where id = '%s'", paidCancelTime.toString(), orderId));
         jdbcTemplate.update(String.format("update merchant_account set profit = profit + %d , mortagage = mortagage + %d where id = '%s'", fee - sku_bond, sku_bond, mid));
 
         return RtCodeConstant.getResult("0");
