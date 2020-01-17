@@ -430,7 +430,7 @@ public class HotelorderServiceImpl implements HotelorderService {
                 .valueI("total_balance" + amount)
                 .column("available_balance")
                 .valueI("available_balance" + amount)
-                .condition("userId = ", userId)
+                .condition("user_id = ", userId)
                 .modify();
     }
 
