@@ -202,8 +202,8 @@ public class TradeServiceImpl implements TradeService {
         if (order_status != 1)
             return RtCodeConstant.getResult("40003");
 
-        long fee = Long.parseLong(order.get("fee").toString());
-        long sku_bond = Long.parseLong(order.get("sku_bond").toString());
+        long fee = Long.parseLong(order.get("fee").toString()) * 100;
+        long sku_bond = Long.parseLong(order.get("sku_bond").toString()) * 100;
         if (fee < 0 || sku_bond < 0)
             return RtCodeConstant.getResult("40001");
         if (money < fee)
