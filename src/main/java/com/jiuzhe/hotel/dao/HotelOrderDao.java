@@ -125,6 +125,10 @@ public class HotelOrderDao {
         return hotelOrderMapper.evaluate(query);
     }
 
+    public int finshOrder(String id, Integer end) {
+        return hotelOrderMapper.finshOrder(id, end);
+    }
+
     public void changePaidTolived(PaidToLived paidToLived) {
         hotelOrderMapper.changePaidTolived(paidToLived);
     }

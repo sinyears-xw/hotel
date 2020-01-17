@@ -415,6 +415,10 @@ public class HotelorderServiceImpl implements HotelorderService {
         //卫生整体评分
         hotelOrderDao.saveSkuCleanScore(query.getSkuId(), skuCleanGrade);
         hotelOrderDao.evaluate(query);
+        //完成订单并且退款
+        HotelOrder order = hotelOrderDao.getOrderById(query.getOrderId());
+        hotelOrderDao.finshOrder(query.getOrderId(), OrderStatusEnum.END.getIndex());
+        upUserAmount(order.getUserId(), order.getSkuBond().toString());
     }
 
     @Autowired

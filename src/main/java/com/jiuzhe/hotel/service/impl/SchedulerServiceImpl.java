@@ -62,6 +62,16 @@ public class SchedulerServiceImpl implements SchedulerService {
         dao.changLivedToApply();
     }
 
+
+    /**
+     * @author: zpy
+     * @date: 2020/1/17 15:59
+     * @description:定时完成订单，直接给离开日期小于等于今天的退款
+     */
+    public void finishOrder() {
+
+    }
+
     /**
      * @Description:将同时将结束定单自动发起推押金
      * @author: 郑鹏宇

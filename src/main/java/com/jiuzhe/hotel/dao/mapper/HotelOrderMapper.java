@@ -3,6 +3,7 @@ package com.jiuzhe.hotel.dao.mapper;
 import com.jiuzhe.hotel.dto.OrderDto;
 import com.jiuzhe.hotel.entity.*;
 import com.jiuzhe.hotel.module.EvaluateQuery;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -96,6 +97,7 @@ public interface HotelOrderMapper {
             @Result(property = "roomNo", column = "roomNo")
     })
     List<HotelOrder> getOrdersByUserId(@Param(value = "userId") String userId);
+
     /**
      * @Description:获取订单列表通过电话号吗
      * @author:郑鹏宇
@@ -129,6 +131,7 @@ public interface HotelOrderMapper {
             @Result(property = "onLine", column = "on_line")
     })
     List<HotelOrder> getOrdersByUserPhone(@Param(value = "phone") String phone);
+
     /**
      * @Description:根据merchantid获取订单列表
      * @author:郑鹏宇
@@ -309,6 +312,7 @@ public interface HotelOrderMapper {
             "and start_date = #{startDate}")
     int upOrderStatusLived(@Param(value = "startDate") LocalDate startDate, @Param(value = "paidStatus") Integer paidStatus, @Param(value = "livedStatus") Integer livedStatus);
 
+
     /**
      * @Description:判定订单是否已经付款
      * @author:郑鹏宇
@@ -347,6 +351,9 @@ public interface HotelOrderMapper {
     @Update("update hotel_order set sku_score=#{skuScore},clean_score=#{cleanScore},sku_problem = #{skuProblem}," +
             "clean_problem=#{cleanProblem} where id = #{orderId}")
     int evaluate(EvaluateQuery query);
+
+    @Update("update hotel_order set order_status = #{end} where id = #{id}")
+    int finshOrder(@Param(value = "id") String id, @Param(value = "end") Integer end);
 
     @Select("SELECT score skuScore, clean_score cleanScore  FROM hotel_sku WHERE id = #{skuId}")
     Evaluate getSkuScore(String skuId);

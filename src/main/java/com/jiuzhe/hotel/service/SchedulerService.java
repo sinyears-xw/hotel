@@ -10,4 +10,6 @@ public interface SchedulerService {
     void msgUserGo();
 
     void changStatsuLivedAndApply();
+
+    void finishOrder();
 }

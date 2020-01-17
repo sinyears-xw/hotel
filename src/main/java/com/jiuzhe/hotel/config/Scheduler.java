@@ -30,14 +30,15 @@ public class Scheduler {
         schedulerService.msgUserGo();
     }
 
-    /**
-     * @Description:自动发起退押金申请，同时也是在这个点同时将当天的订单变成已入住
-     * @author:郑鹏宇
-     * @date:2018/5/3
-     */
-    @Scheduled(cron = "00 00 12 * * ?")
-    public void changStatsuLivedAndApply() {
-        schedulerService.changStatsuLivedAndApply();
-    }
+//    /**
+//     * @Description:自动发起退押金申请，同时也是在这个点同时将当天的订单变成已入住
+//     * @author:郑鹏宇
+//     * @date:2018/5/3
+//     */
+//    @Scheduled(cron = "00 00 12 * * ?")
+//    public void changStatsuLivedAndApply() {
+//
+//        schedulerService.changStatsuLivedAndApply();
+//    }
 
 }
