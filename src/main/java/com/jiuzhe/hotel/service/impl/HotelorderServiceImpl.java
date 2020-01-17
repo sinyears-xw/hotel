@@ -418,7 +418,8 @@ public class HotelorderServiceImpl implements HotelorderService {
         //完成订单并且退款
         HotelOrder order = hotelOrderDao.getOrderById(query.getOrderId());
         hotelOrderDao.finshOrder(query.getOrderId(), OrderStatusEnum.END.getIndex());
-        upUserAmount(order.getUserId(), order.getSkuBond().toString());
+        Integer bond = order.getSkuBond() * 100;
+        upUserAmount(order.getUserId(), bond.toString());
     }
 
     @Autowired
