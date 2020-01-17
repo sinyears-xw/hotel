@@ -247,6 +247,7 @@ public class HotelorderServiceImpl implements HotelorderService {
             }
             //如果可以取消订单，则发送退钱的请求(首先需要释放房间)
             hotelOrderDao.upRoomStatus(query.getSkuId(), RoomStatusEnum.ON_SALE.getIndex());
+            unsetReservation(query.getSkuId(), query.getStartDate(), query.getEndDate());
             Integer bond = order.getSkuBond() * 100;
             String userId = order.getUserId();
             Integer skuPrice = order.getSkuPrice() * 100;
@@ -261,6 +262,7 @@ public class HotelorderServiceImpl implements HotelorderService {
         int upNum = hotelOrderDao.upOrderStatusById(query.getId(), OrderStatusEnum.CANCEL.getIndex(), null);
         //订单取消需要释放房间
         if (upNum == 1) {
+            hotelOrderDao.upRoomStatus(query.getSkuId(), RoomStatusEnum.ON_SALE.getIndex());
             unsetReservation(query.getSkuId(), query.getStartDate(), query.getEndDate());
         }
         return upNum;
