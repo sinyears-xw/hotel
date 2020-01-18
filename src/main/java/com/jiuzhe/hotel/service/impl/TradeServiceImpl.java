@@ -74,10 +74,10 @@ public class TradeServiceImpl implements TradeService {
 
         }
 
-        Map rs = new HashMap();
-        rs.put("depositId", depositId + "_" + userId);
-        rs.put("notify_url", AlipayConfig.notify_url_deposit);
-        return RtCodeConstant.getResult("0", rs);
+//        Map rs = new HashMap();
+//        rs.put("depositId", depositId + "_" + userId);
+//        rs.put("notify_url", AlipayConfig.notify_url_deposit);
+        return RtCodeConstant.getResult("0", order.get("data"));
     }
 
     //提现
