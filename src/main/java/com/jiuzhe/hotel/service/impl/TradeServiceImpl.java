@@ -59,7 +59,7 @@ public class TradeServiceImpl implements TradeService {
                 .column("user_id").value(userId)
                 .column("amount").valueI(String.valueOf(amount))
                 .column("status").valueI(String.valueOf(1))
-                .column("updt").value(LocalDateTime.now().toString())
+//                .column("updt").value(LocalDateTime.now().toString())
                 .modify();
         //调用支付接口
         switch (channel) {
@@ -165,8 +165,8 @@ public class TradeServiceImpl implements TradeService {
         String userId = outTradeNo.split("_")[1];
         sqlService.init().update()
                 .table("deposit")
-                .column("status", "available_amount", "updt")
-                .value("0", String.valueOf(amount), LocalDateTime.now().toString())
+                .column("status", "available_amount", "time_succeeded")
+                .value("2", String.valueOf(amount), LocalDateTime.now().toString())
                 .condition("id = ", depositId)
                 .modify();
         //修改用户金额
