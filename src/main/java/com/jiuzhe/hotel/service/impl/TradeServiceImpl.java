@@ -165,7 +165,7 @@ public class TradeServiceImpl implements TradeService {
         String userId = outTradeNo.split("_")[1];
         sqlService.init().update()
                 .table("deposit")
-                .column("status", "paidAmount", "updt")
+                .column("status", "available_amount", "updt")
                 .value("0", String.valueOf(amount), LocalDateTime.now().toString())
                 .condition("id = ", depositId)
                 .modify();
