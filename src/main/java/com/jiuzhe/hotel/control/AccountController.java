@@ -108,6 +108,21 @@ public class AccountController {
 		}	
 	}
 
+	@RequestMapping(value = "/paypasswd/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public Map passwdSet(@PathVariable String id) {
+		try {
+			if (StringUtil.isEmpty(id))
+				return RtCodeConstant.getResult("40001");
+
+			return accountService.passwdSet(id);
+
+		} catch (Exception e) {
+			logger.error(e);
+			return RtCodeConstant.getResult("-1");
+		}
+	}
+
 	@RequestMapping(value = "/getsettleaccount/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Map getsettleaccount(@PathVariable String id) {
