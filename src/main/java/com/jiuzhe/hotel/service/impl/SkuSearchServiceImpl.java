@@ -1,6 +1,7 @@
 package com.jiuzhe.hotel.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.jiuzhe.hotel.constants.HotelTypeEnum;
 import com.jiuzhe.hotel.constants.RoomStatusEnum;
 import com.jiuzhe.hotel.dao.SkuSearchQueryDao;
 import com.jiuzhe.hotel.dto.SkuDetailDto;
@@ -171,6 +172,13 @@ public class SkuSearchServiceImpl implements SkuSearchService {
         hotelSku.setCityName(query.getCityName());
         PageHelper.startPage(1, query.getNum());
         List<HotelSku> hotelSkus = skuSearchQueryDao.getRecommendHotel(hotelSku, query.getGist());
+        //需要对结果进行处理
+        if (hotelSkus.size() > 0) {
+            for (int i = 0; i < hotelSkus.size(); i++) {
+                HotelSku ho = hotelSkus.get(i);
+                hotelSkus.get(i).setRoomType(HotelTypeEnum.getName(ho.getRoomPrice()));
+            }
+        }
         return hotelSkus;
     }
 
