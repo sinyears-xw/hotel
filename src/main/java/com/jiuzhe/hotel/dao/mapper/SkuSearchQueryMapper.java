@@ -27,8 +27,9 @@ public interface SkuSearchQueryMapper {
     @SelectProvider(type = SkuSearchQueryProvider.class, method = "getHotels")
     List<Search> getHotels(SearchQuery searchQuery);
 
-    @SelectProvider(type = SkuSearchQueryProvider.class,method = "getRecommendHotel")
+    @SelectProvider(type = SkuSearchQueryProvider.class, method = "getRecommendHotel")
     List<HotelSku> getRecommendHotel(HotelSku hotelSku, Integer gist);
+
     /**
      * @Description:单独获取每日状态的方法
      * @author:郑鹏宇
@@ -46,8 +47,10 @@ public interface SkuSearchQueryMapper {
      * @date:2018/4/9
      */
     @Select("<script> " +
-            "SELECT a.score,a.room_status, a.id,a.room_bond, s.storePic storePic,s.ReceptionPic receptionPic, s.name sku_name,a.address,a.lng,a.remark," +
-            "a.lat,a.merchant_id,a.room_price,b.name, a.room_type,a.wifi,a.bedroom_num,a.city_name,a.area," +
+            "SELECT a.score,a.room_status, a.id,a.room_bond, s.storePic storePic," +
+            "s.ReceptionPic receptionPic, a.sku_name ,a.address,a.lng,a.remark," +
+            "a.lat,a.merchant_id,a.room_price,b.name, a.room_type,a.wifi,a.bedroom_num," +
+            "a.city_name,a.area," +
             "a.toilet_num,a.room_no,a.bed_num,a.imgurls urls," +
             "b.name layName,b.wifi layWifi,b.bedroom layBedroom,b.bed layBed,b.toilet layToilet," +
             "b.piclist  laypicList,b.count laycount " +
@@ -74,7 +77,6 @@ public interface SkuSearchQueryMapper {
     List<Map> getDailyPriceBySkuId(String skuId);
 
     /**
-     *
      * @Description:点击图标返回给前台的酒店详情(放盘价格及日期)
      * @author:郑鹏宇
      * @date:2018/4/9

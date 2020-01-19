@@ -42,9 +42,10 @@ public class SkuSearchQueryProvider {
 
     public String getRecommendHotel(HotelSku hotelSku, Integer gist) {
         return new SQL() {{
-            SELECT("a.merchant_id merchantId, s.storePic storePic, s.ReceptionPic receptionPic,a.city_name cityName," +
+            SELECT("a.merchant_id merchantId, s.storePic storePic, " +
+                    "s.ReceptionPic receptionPic,a.city_name cityName," +
                     "a.area, a.score,a.weight,a.address, a.id, " +
-                    "a.room_price roomPrice, b.name roomType, s.name skuName," +
+                    "a.room_price roomPrice, b.name roomType, a.sku_name skuName," +
                     " a.room_no roomNo, a.imgurls imgUrls,b.piclist laypicList");
             FROM("hotel_sku a ");
             LEFT_OUTER_JOIN("hotel_sku_layout b on a.layout_id = b.id");
