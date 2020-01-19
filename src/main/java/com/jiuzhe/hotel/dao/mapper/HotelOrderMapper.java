@@ -37,7 +37,7 @@ public interface HotelOrderMapper {
     int getOrderNumByStatus(@Param(value = "userId") String userId, @Param(value = "status") Integer status);
 
     @Select("SELECT b.score,a.platform_fee,a.id,CONCAT(s.name , b.room_no) storeName,s.address address,b.address,b.room_type roomType,b.room_status roomStatus," +
-            "a.remark,a.user_id,a.sku_id,a.sku_price,a.sku_bond,a.start_date,a.end_date,a.merchant_id,a.on_line," +
+            "a.remark,a.user_id,a.sku_id,a.sku_price,a.sku_bond,a.start_date,a.end_date,a.merchant_id,a.on_line,b.sku_name skuName," +
             "a.occupant_name,a.occupant_id_card,a.occupant_phone,cast(a.order_status as unsigned) as order_status,a.paied_expired_time " +
             "from hotel_order a left join hotel_sku b on a.sku_id = b.id left join store s on s.id = b.store_id " +
             " where a.id = #{id}")
