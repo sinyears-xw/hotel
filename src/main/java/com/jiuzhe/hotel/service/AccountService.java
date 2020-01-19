@@ -7,6 +7,8 @@ public interface AccountService {
 
     public Map getAccountInfo(String id);
 
+    public Map passwdSet(String id);
+
     public Map saveSettleAccount(Map param);
 
     public Map delSettleAccount(Map param);

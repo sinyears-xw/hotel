@@ -149,7 +149,7 @@ public class TradeServiceImpl implements TradeService {
     public Map withdrawTrans(int withdrew, String withdrawId, String userId, String withdrewAmount) {
         if (withdrew != 1) {
             insertWithdraw(withdrawId, userId, withdrewAmount, "4");
-            return RtCodeConstant.getResult("-1");
+            return RtCodeConstant.getResult("30004");
         }
         insertWithdraw(withdrawId, userId, withdrewAmount, "3");
         upUserAmount(userId, "-" + withdrewAmount);

@@ -171,5 +171,16 @@ public class AccountServiceImpl implements AccountService {
         List<Map<String, Object>> products = jdbcTemplate.queryForList(sql);
         return RtCodeConstant.getResult("0", products);
     }
+
+    public Map passwdSet(String id) {
+        boolean isSet = false;
+        String sql = String.format("SELECT count(*) num from account WHERE passwd is not NULL and user_id = '%s'", id);
+        Map rs = jdbcTemplate.queryForMap(sql);
+        if (Integer.parseInt(rs.get("num").toString()) == 1)
+            isSet = true;
+
+        return RtCodeConstant.getResult("0", isSet);
+    }
+
 }
 
